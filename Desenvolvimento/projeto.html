@@ -1,13 +1,119 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="O WageGap AI utiliza Inteligência Artificial Explicável para auditar folhas de pagamento, isolar vieses demográficos e promover equidade salarial em conformidade com métricas ESG.">
-    <title>WageGap AI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WageGap AI | Auditoria de Equidade Salarial</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Importação do Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>WageGap AI | Plataforma Inteligente de Diagnóstico e Equidade Salarial</h1>
-    <h2>Objetivo</h2>
-    <p>Capacitar gestores e equipes de RH a auditar suas estruturas de remuneração de forma automatizada e matematicamente justa. O sistema busca isolar o impacto real de qualificações técnicas (como tempo de casa, senioridade e escolaridade) de fatores demográficos (gênero e raça), fornecendo diagnósticos preditivos e explicativos que orientam orçamentos de correção salarial e programas de capacitação e retenção de talentos minorizados.</p>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>WageGap AI</h2>
+        <div class="nav-item active">Painel Geral</div>
+        <div class="nav-item">Comparativo Mercado</div>
+        <div class="nav-item">Importação de Dados</div>
+        <div class="nav-item">Relatórios ESG</div>
+        <div class="nav-item">Configurações</div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Visão Geral de Equidade Salarial</h1>
+                <p>Diagnóstico corporativo baseado em microdados da folha de pagamento.</p>
+            </div>
+            <div class="filters">
+                <select><option>Setor: Todos</option></select>
+                <select><option>Departamento: Tecnologia</option></select>
+                <select>
+                    <option>Período: 2026 Q1</option>
+                    <option>Período: 2026 Q2</option>
+                    <option>Período: 2026 Q3</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">Score de Equidade</div>
+                <div class="kpi-value text-green">78/100</div>
+                <div class="kpi-subtitle">Status: Moderado / Aceitável</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Disparidade Média (Gênero)</div>
+                <div class="kpi-value text-red">16.5%</div>
+                <div class="kpi-subtitle">Redução de 1.5% vs Q4</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Disparidade Média (Raça)</div>
+                <div class="kpi-value text-red">19.0%</div>
+                <div class="kpi-subtitle">Média: Profissionais Negros vs Brancos</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-title">Impacto Financeiro p/ Ajuste</div>
+                <div class="kpi-value">R$ 1.15M</div>
+                <div class="kpi-subtitle">Orçamento estimado para nivelamento</div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-grid">
+            <div class="chart-container">
+                <div class="chart-header">Clustering de Perfis (K-Means)</div>
+                <canvas id="clusterChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-header">Impacto Marginal SHAP (XAI)</div>
+                <canvas id="shapChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Action Plan -->
+        <div class="table-container">
+            <div class="chart-header">Plano de Ação Recomendado (ODS 5, 8, 10)</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item de Ação</th>
+                        <th>Segmento Alvo</th>
+                        <th>Orçamento Previsto</th>
+                        <th>Prioridade</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Revisão Salarial Imediata</td>
+                        <td>Analistas Plenos (Gênero Feminino)</td>
+                        <td>R$ 80.000</td>
+                        <td><span class="text-red">Alta</span></td>
+                        <td><button class="btn-action">Gerar Plano</button></td>
+                    </tr>
+                    <tr>
+                        <td>Programa de Mentoria</td>
+                        <td>Líderes Femininas no Setor Tech</td>
+                        <td>R$ 25.000</td>
+                        <td>Média</td>
+                        <td><button class="btn-action">Gerar Plano</button></td>
+                    </tr>
+                    <tr>
+                        <td>Auditoria de Promoções</td>
+                        <td>Minorias Raciais (Todas as áreas)</td>
+                        <td>R$ 0 (Interno)</td>
+                        <td>Média</td>
+                        <td><button class="btn-action">Iniciar Auditoria</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

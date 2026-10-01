@@ -1,8 +1,7 @@
-/* Definição de Variáveis de Cores e Estilos Básicos */
 :root {
-    --sidebar-bg: #0F172A; /* Azul escuro quase preto */
+    --sidebar-bg: #0F172A;
     --sidebar-text: #94A3B8;
-    --main-bg: #F8FAFC; /* Fundo cinza bem claro */
+    --main-bg: #F8FAFC;
     --card-bg: #FFFFFF;
     --text-primary: #1E293B;
     --text-secondary: #64748B;
@@ -268,11 +267,11 @@ body {
 }
 
 .kpi-card .text-highlight {
-    color: #C2410C; /* Tom alaranjado/avermelhado igual da imagem */
+    color: #C2410C;
     font-weight: 500;
 }
 
-/* Dark Card Specifics */
+/* Dark Card */
 .dark-card {
     background-color: var(--sidebar-bg);
     color: white;

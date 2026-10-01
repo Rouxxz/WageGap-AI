@@ -3,118 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WageGap AI | Auditoria de Equidade Salarial</title>
+    <title>WageGap AI | Visão Geral</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Importação do Chart.js via CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Fonte Inter do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h2>WageGap AI</h2>
-        <div class="nav-item active">Painel Geral</div>
-        <div class="nav-item">Comparativo Mercado</div>
-        <div class="nav-item">Importação de Dados</div>
-        <div class="nav-item">Relatórios ESG</div>
-        <div class="nav-item">Configurações</div>
-    </div>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Header -->
-        <div class="header">
-            <div>
-                <h1>Visão Geral de Equidade Salarial</h1>
-                <p>Diagnóstico corporativo baseado em microdados da folha de pagamento.</p>
+    <!-- Sidebar Escura -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo-container">
+                <div class="logo-icon">W</div>
+                <div class="logo-text">WageGap AI</div>
             </div>
-            <div class="filters">
-                <select><option>Setor: Todos</option></select>
-                <select><option>Departamento: Tecnologia</option></select>
-                <select>
-                    <option>Período: 2026 T1</option>
-                    <option>Período: 2026 T2</option>
-                    <option>Período: 2026 T3</option>
-                    <option>Período: 2026 T4</option>
-                </select>
-            </div>
+            <p class="sidebar-subtitle">Diagnóstico de disparidade salarial<br>RAIS - CAGED</p>
+
+            <nav class="sidebar-nav">
+                <span class="nav-section-title">ANÁLISE</span>
+                <a href="#" class="nav-item active">
+                    <span class="icon">⊞</span> Visão geral
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">⁙</span> Clusters de perfis
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📊</span> Explicabilidade (SHAP)
+                </a>
+                <a href="#" class="nav-item">
+                    <span class="icon">📈</span> Ranking de disparidade
+                </a>
+            </nav>
         </div>
-
-        <!-- KPIs -->
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-title">Score de Equidade</div>
-                <div class="kpi-value text-green">78/100</div>
-                <div class="kpi-subtitle">Status: Moderado / Aceitável</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Disparidade Média (Gênero)</div>
-                <div class="kpi-value text-red">16.5%</div>
-                <div class="kpi-subtitle">Redução de 1.5% vs T4</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Disparidade Média (Raça)</div>
-                <div class="kpi-value text-red">19.0%</div>
-                <div class="kpi-subtitle">Média: Profissionais Negros vs Brancos</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-title">Impacto Financeiro p/ Ajuste</div>
-                <div class="kpi-value">R$ 1.15M</div>
-                <div class="kpi-subtitle">Orçamento estimado para nivelamento</div>
-            </div>
+        
+        <div class="sidebar-bottom">
+            <span class="active-crop-label">Recorte ativo:</span>
+            <span class="active-crop-value">São Paulo - 2024</span>
         </div>
+    </aside>
 
-        <!-- Charts -->
-        <div class="charts-grid">
-            <div class="chart-container">
-                <div class="chart-header">Clustering de Perfis (K-Means)</div>
-                <canvas id="clusterChart"></canvas>
+    <!-- Conteúdo Principal -->
+    <main class="main-content">
+        
+        <!-- Cabeçalho com Filtros -->
+        <header class="top-header">
+            <div class="title-area">
+                <span class="breadcrumb">WageGap AI / Visão geral</span>
+                <h1>Visão geral do recorte</h1>
             </div>
-            <div class="chart-container">
-                <div class="chart-header">Impacto Marginal SHAP (XAI)</div>
-                <canvas id="shapChart"></canvas>
+            
+            <div class="filters-area">
+                <div class="filter-group">
+                    <label>UF</label>
+                    <select><option>São Paulo (SP)</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>Setor</label>
+                    <select><option>Todos os setores</option></select>
+                </div>
+                <div class="filter-group">
+                    <label>Ano</label>
+                    <select><option>2024</option></select>
+                </div>
+                <button class="btn-primary">Aplicar recorte</button>
             </div>
-        </div>
+        </header>
 
-        <!-- Action Plan -->
-        <div class="table-container">
-            <div class="chart-header">Plano de Ação Recomendado</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item de Ação</th>
-                        <th>Segmento Alvo</th>
-                        <th>Orçamento Previsto</th>
-                        <th>Prioridade</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Revisão Salarial Imediata</td>
-                        <td>Analistas Plenos (Gênero Feminino)</td>
-                        <td>R$ 80.000</td>
-                        <td><span class="text-red">Alta</span></td>
-                        <td><button class="btn-action">Gerar Plano</button></td>
-                    </tr>
-                    <tr>
-                        <td>Programa de Mentoria</td>
-                        <td>Líderes Femininas no Setor Tech</td>
-                        <td>R$ 25.000</td>
-                        <td>Média</td>
-                        <td><button class="btn-action">Gerar Plano</button></td>
-                    </tr>
-                    <tr>
-                        <td>Auditoria de Promoções</td>
-                        <td>Minorias Raciais (Todas as áreas)</td>
-                        <td>R$ 0 (Interno)</td>
-                        <td>Média</td>
-                        <td><button class="btn-action">Iniciar Auditoria</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+        <!-- Corpo do Dashboard -->
+        <section class="dashboard-body">
+            <p class="intro-text">
+                Painel consolidado do recorte selecionado. Os indicadores abaixo resumem a disparidade salarial identificada nos microdados RAIS/CAGED processados para São Paulo em 2024, antes de aprofundar por cluster, variável ou município.
+            </p>
 
-    <script src="script.js"></script>
+            <!-- Cards de KPI -->
+            <div class="kpi-grid">
+                <!-- Card Destaque (Escuro) -->
+                <div class="kpi-card dark-card">
+                    <h3>Disparidade salarial média</h3>
+                    <div class="kpi-value">23,4<span>%</span></div>
+                    <p>Diferença média de renda entre perfis comparáveis por escolaridade e cargo, atribuível a gênero, raça e localização.</p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="kpi-card">
+                    <h3>Municípios mapeados</h3>
+                    <div class="kpi-value">350</div>
+                    <p class="text-highlight">de 645 no estado</p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="kpi-card">
+                    <h3>Perfis (clusters) identificados</h3>
+                    <div class="kpi-value">6</div>
+                    <p class="text-highlight">via K-Means</p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="kpi-card">
+                    <h3>Trabalhadores no recorte</h3>
+                    <div class="kpi-value">1,2<span>M</span></div>
+                    <p class="text-highlight">RAIS 2024</p>
+                </div>
+            </div>
+
+            <!-- Card de Informação -->
+            <div class="info-card">
+                <h2>Como ler este painel</h2>
+                <p>Use os filtros no topo para trocar o recorte de UF, setor e ano. Depois, navegue pelo menu lateral: <strong>Clusters</strong> mostra os perfis de trabalhadores identificados; <strong>Explicabilidade</strong> mostra o peso de cada variável na renda dentro de cada perfil; <strong>Ranking</strong> prioriza os municípios e setores onde a disparidade é mais urgente.</p>
+            </div>
+
+            <div class="footer-note">
+                Protótipo navegável - WageGap AI - dados fictícios ilustrativos para fins de demonstração
+            </div>
+        </section>
+
+    </main>
+
 </body>
 </html>

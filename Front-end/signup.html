@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WageGap AI — Criar conta</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Estilos: o design system base (style.css) + os componentes de autenticação (auth.css) -->
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<div class="auth-page">
+  <div class="auth-card">
+
+    <!-- Logo centralizada -->
+    <div class="auth-logo-wrap">
+      <div class="auth-logo-mark">W</div>
+      <div class="auth-logo-name">WageGap AI</div>
+      <div class="auth-logo-sub">Diagnóstico de disparidade salarial<br>RAIS · CAGED</div>
+    </div>
+
+    <h1 class="auth-heading">Criar conta</h1>
+    <p class="auth-subheading">Leva menos de um minuto. Use seu e-mail institucional para acesso completo ao dashboard.</p>
+
+    <!-- Alerta de erro geral (ex: e-mail já cadastrado). Oculto até o signup.js exibir. -->
+    <div class="auth-alert" id="signup-alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/>
+      </svg>
+      <span id="signup-alert-text">Não foi possível criar a conta. Tente novamente.</span>
+    </div>
+
+    <form class="auth-form" id="signup-form" novalidate>
+
+      <div class="field">
+        <label for="su-nome">Nome completo</label>
+        <input type="text" id="su-nome" name="nome" placeholder="Seu nome completo" autocomplete="name">
+        <div class="field-error-msg" id="su-nome-error"></div>
+      </div>
+
+      <div class="field">
+        <label for="su-email">E-mail</label>
+        <input type="email" id="su-email" name="email" placeholder="voce@exemplo.com" autocomplete="email">
+        <div class="field-error-msg" id="su-email-error"></div>
+      </div>
+
+      <div class="signup-grid">
+
+        <div class="field">
+          <label for="su-senha">Senha</label>
+
+          <div class="password-field-wrap">
+            <input type="password" id="su-senha" name="senha" placeholder="••••••••" autocomplete="new-password">
+
+            <button type="button" class="toggle-password" id="toggle-su-senha" aria-label="Mostrar senha">
+              <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.6 21.6 0 0 1 5.06-5.94M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 7 11 7a21.6 21.6 0 0 1-2.16 3.19m-6.2-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="field-error-msg" id="su-senha-error"></div>
+        </div>
+
+        <div class="field">
+          <label for="su-senha2">Confirmar senha</label>
+
+          <div class="password-field-wrap">
+            <input type="password" id="su-senha2" name="senha2" placeholder="••••••••" autocomplete="new-password">
+
+            <button type="button" class="toggle-password" id="toggle-su-senha2" aria-label="Mostrar senha">
+              <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="icon-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.6 21.6 0 0 1 5.06-5.94M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 7 11 7a21.6 21.6 0 0 1-2.16 3.19m-6.2-1.07a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="field-error-msg" id="su-senha2-error"></div>
+        </div>
+
+      </div>
+
+      <label class="check-row">
+        <input type="checkbox" class="check-input" id="su-termos">
+        <span>Li e concordo com os <span class="link-gold">Termos de uso</span> e a <span class="link-gold">Política de privacidade</span>.</span>
+      </label>
+      <div class="field-error-msg" id="su-termos-error"></div>
+
+      <button type="submit" class="btn-apply btn-block" id="signup-submit">
+        <span class="btn-spinner"></span>
+        <span class="btn-label">Criar conta</span>
+      </button>
+
+    </form>
+
+    <div class="auth-divider"><span>ou</span></div>
+
+    <div class="auth-signup">
+      <p>Já tem uma conta?</p>
+      <a href="login.html" class="btn-outline">Entrar na plataforma</a>
+    </div>
+
+    <div class="auth-foot-note">WageGap AI © 2026 — ODS 5 · 8 · 10</div>
+
+  </div>
+</div>
+
+<script src="signup.js"></script>
+</body>
+</html>

@@ -1,4 +1,3 @@
-
 services:
   # Serviço do Front-end
   frontend:

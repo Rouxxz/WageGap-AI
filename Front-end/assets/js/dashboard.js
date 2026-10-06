@@ -1,4 +1,13 @@
-const navItems = document.querySelectorAll('.nav-item');
+/*
+  dashboard.js
+  ------------
+  Interações do dashboard (dashboard.html): navegação entre telas,
+  título/breadcrumb, modo claro/escuro e botão "Sair da conta".
+*/
+
+/* Só os botões que têm destino (data-target). O botão "Sair da conta"
+   também usa a classe .nav-item, mas não troca de tela. */
+const navItems = document.querySelectorAll('.nav-item[data-target]');
 
 const screens = document.querySelectorAll('.screen');
 
@@ -136,7 +145,7 @@ navItems.forEach(btn => {
 
   logoutBtn.addEventListener('click', async () => {
     await fetch('/api/logout', { method:'POST' });
-    window.location.href = '../Login/login.html';
+    window.location.href = 'login.html';
   });
 */
 

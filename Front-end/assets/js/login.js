@@ -3,7 +3,7 @@
   ---------
   Lógica da tela única de acesso: ENTRAR + CRIAR CONTA.
 
-  Antes eram duas telas (login.html e signup.html). Agora as duas
+  Antes eram duas telas (login e cadastro, antigos arquivos separados). Agora as duas
   ficam no mesmo cartão e um painel escuro desliza de um lado para
   o outro. Este arquivo cuida de:
 
@@ -443,7 +443,7 @@ loginForm.addEventListener('submit', (evento) => {
         recebido do backend (ex: localStorage ou cookie) antes
         de redirecionar.
       */
-      window.location.href = 'index.html';
+      window.location.href = 'dashboard.html';
 
     })
     .catch(() => {

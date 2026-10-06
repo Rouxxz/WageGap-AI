@@ -1,0 +1,724 @@
+<!--
+  dashboard.html
+  --------------
+  Painel principal (visão geral, clusters, SHAP, ranking, configurações).
+  Estilos: ../assets/css/style.css  |  Script: ../assets/js/dashboard.js
+-->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WageGap AI — Protótipo</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+
+  <!-- Container principal da aplicação -->
+  <div class="app">
+
+    <!-- Início da Sidebar (Menu Lateral) -->
+    <aside class="sidebar">
+
+      <!-- Logo e Identidade da Marca -->
+      <div class="brand">
+        <div class="brand-mark">W</div>
+        <div class="brand-name">WageGap AI</div>
+      </div>
+
+      <div class="brand-sub">
+        Diagnóstico de disparidade salarial<br>
+        RAIS · CAGED
+      </div>
+
+      <!-- Rótulo da Seção de Navegação -->
+      <div class="nav-section-label">
+        Análise
+      </div>
+
+      <!-- Links/Botões de Navegação Principal -->
+      <nav class="primary-nav">
+
+        <button class="nav-item active" data-target="screen-home">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="9" rx="1"/>
+            <rect x="14" y="3" width="7" height="5" rx="1"/>
+            <rect x="14" y="12" width="7" height="9" rx="1"/>
+            <rect x="3" y="16" width="7" height="5" rx="1"/>
+          </svg>
+          Visão geral
+        </button>
+
+        <button class="nav-item" data-target="screen-clusters">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <circle cx="6" cy="7" r="2.4"/>
+            <circle cx="17" cy="6" r="1.8"/>
+            <circle cx="15" cy="15" r="2.6"/>
+            <circle cx="6" cy="17" r="1.8"/>
+            <circle cx="19" cy="15" r="1.4"/>
+          </svg>
+          Clusters de perfis
+        </button>
+
+        <button class="nav-item" data-target="screen-shap">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 19V10 M11 19V5 M18 19V13"/>
+          </svg>
+          Explicabilidade (SHAP)
+        </button>
+
+        <button class="nav-item" data-target="screen-ranking">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 20L9 11L13 15L20 4"/>
+          </svg>
+          Ranking de disparidade
+        </button>
+
+        <button class="nav-item" data-target="screen-settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          Configurações
+        </button>
+
+      </nav>
+
+      <!-- Sair da conta -->
+      <div class="nav-logout-wrap">
+        <button class="nav-item nav-logout" id="logout-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <path d="M16 17l5-5-5-5"/>
+            <path d="M21 12H9"/>
+          </svg>
+          Sair da conta
+        </button>
+      </div>
+
+      <!-- Rodapé da Sidebar (Informações do Recorte Ativo) -->
+      <div class="sidebar-footer">
+        Recorte ativo:<br>
+        <strong>São Paulo · 2024</strong>
+      </div>
+
+    </aside>
+    <!-- Fim da Sidebar -->
+
+
+    <!-- Início da Área Principal (Main Content) -->
+    <main>
+
+      <!-- Início do Topbar / Navbar (Cabeçalho) -->
+      <div class="topbar">
+
+        <div class="breadcrumb" id="breadcrumb">
+          WageGap AI / Visão geral
+        </div>
+
+        <h1 id="page-title">
+          Visão geral do recorte
+        </h1>
+
+        <!-- Filtros do Topbar -->
+        <div class="filters">
+
+          <div class="field">
+            <label for="f-uf">UF</label>
+            <select id="f-uf">
+              <option>São Paulo (SP)</option>
+              <option>Bahia (BA)</option>
+              <option>Amazonas (AM)</option>
+              <option>Rio Grande do Sul (RS)</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="f-setor">Setor</label>
+            <select id="f-setor">
+              <option>Todos os setores</option>
+              <option>Tecnologia da Informação</option>
+              <option>Indústria Automotiva</option>
+              <option>Comércio Varejista</option>
+              <option>Construção Civil</option>
+              <option>Saúde</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="f-ano">Ano</label>
+            <select id="f-ano">
+              <option>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+            </select>
+          </div>
+
+          <button class="btn-apply">
+            Aplicar recorte
+          </button>
+
+        </div>
+
+      </div>
+      <!-- Fim do Topbar -->
+
+
+      <!-- Início do Conteúdo das Telas -->
+      <div class="content">
+
+        <!-- Tela 1: Visão Geral -->
+        <section class="screen active" id="screen-home">
+
+          <p class="lede">
+            Painel consolidado do recorte selecionado.
+            Os indicadores abaixo resumem a disparidade salarial
+            identificada nos microdados RAIS/CAGED processados
+            para São Paulo em 2024, antes de aprofundar por
+            cluster, variável ou município.
+          </p>
+
+          <!-- Cards de KPIs -->
+          <div class="kpi-row">
+
+            <div class="kpi featured">
+              <div class="kpi-label">Disparidade salarial média</div>
+              <div class="kpi-value">23,4<small>%</small></div>
+              <div class="kpi-note">
+                Diferença média de renda entre perfis comparáveis
+                por escolaridade e cargo, atribuível a gênero,
+                raça e localização.
+              </div>
+            </div>
+
+            <div class="kpi">
+              <div class="kpi-label">Municípios mapeados</div>
+              <div class="kpi-value">350</div>
+              <div class="kpi-delta">de 645 no estado</div>
+            </div>
+
+            <div class="kpi">
+              <div class="kpi-label">Perfis (clusters) identificados</div>
+              <div class="kpi-value">6</div>
+              <div class="kpi-delta">via K-Means</div>
+            </div>
+
+            <div class="kpi">
+              <div class="kpi-label">Trabalhadores no recorte</div>
+              <div class="kpi-value">1,2<small>M</small></div>
+              <div class="kpi-delta">RAIS 2024</div>
+            </div>
+
+          </div>
+
+          <!-- Bloco Informativo -->
+          <section class="block">
+            <div class="block-head">
+              <h2>Como ler este painel</h2>
+            </div>
+            <p class="block-desc">
+              Use os filtros no topo para trocar o recorte de UF,
+              setor e ano. Depois, navegue pelo menu lateral:
+              <strong>Clusters</strong> mostra os perfis de
+              trabalhadores identificados;
+              <strong>Explicabilidade</strong> mostra o peso de
+              cada variável na renda dentro de cada perfil;
+              <strong>Ranking</strong> prioriza os municípios
+              e setores onde a disparidade é mais urgente.
+            </p>
+          </section>
+
+        </section>
+
+
+        <!-- Tela 2: Clusters -->
+        <section class="screen" id="screen-clusters">
+
+          <p class="lede">
+            Segmentação dos trabalhadores do recorte em perfis
+            (clusters) com características socioeconômicas
+            semelhantes, via K-Means. Cada ponto representa
+            um grupo de trabalhadores; a posição reflete renda
+            e escolaridade médias.
+          </p>
+
+          <section class="block">
+            <div class="block-head">
+              <h2>Mapa de clusters</h2>
+            </div>
+
+            <div class="cluster-layout">
+
+              <!-- Gráfico SVG e Legenda -->
+              <div>
+                <svg viewBox="0 0 480 300" width="100%" height="auto" role="img" aria-label="Gráfico de dispersão dos clusters">
+                  <line x1="40" y1="10" x2="40" y2="260" stroke="#DCE1E9"/>
+                  <line x1="40" y1="260" x2="460" y2="260" stroke="#DCE1E9"/>
+                  <text x="10" y="20" font-family="IBM Plex Sans" font-size="10" fill="#8892A6">Renda</text>
+                  <text x="420" y="278" font-family="IBM Plex Sans" font-size="10" fill="#8892A6">Escolaridade</text>
+
+                  <circle cx="90" cy="210" r="20" fill="#C9932B" opacity="0.75"/>
+                  <circle cx="120" cy="230" r="12" fill="#C9932B" opacity="0.55"/>
+                  <circle cx="170" cy="150" r="24" fill="#2C7A72" opacity="0.75"/>
+                  <circle cx="210" cy="170" r="14" fill="#2C7A72" opacity="0.5"/>
+                  <circle cx="280" cy="110" r="27" fill="#48536B" opacity="0.7"/>
+                  <circle cx="330" cy="90" r="16" fill="#48536B" opacity="0.5"/>
+                  <circle cx="380" cy="60" r="22" fill="#C1503D" opacity="0.7"/>
+                  <circle cx="360" cy="140" r="13" fill="#C1503D" opacity="0.45"/>
+                </svg>
+
+                <div class="legend">
+                  <div class="legend-item">
+                    <span class="legend-dot gold"></span>
+                    Perfil A — Serviços gerais, baixa escolaridade
+                  </div>
+
+                  <div class="legend-item">
+                    <span class="legend-dot teal"></span>
+                    Perfil B — Técnico, escolaridade média
+                  </div>
+
+                  <div class="legend-item">
+                    <span class="legend-dot slate"></span>
+                    Perfil C — Administrativo/gestão
+                  </div>
+
+                  <div class="legend-item">
+                    <span class="legend-dot rust"></span>
+                    Perfil D — Especialistas, alta escolaridade
+                  </div>
+                </div>
+              </div>
+
+              <!-- Lista de Cards dos Perfis -->
+              <div class="cluster-cards">
+
+                <div class="cluster-card profile-a">
+                  <h3>Perfil A · Serviços gerais</h3>
+                  <p>
+                    18% dos trabalhadores do recorte.
+                    Maior disparidade de gênero observada
+                    entre os 6 perfis (29%).
+                  </p>
+                </div>
+
+                <div class="cluster-card profile-b">
+                  <h3>Perfil B · Técnico</h3>
+                  <p>
+                    24% dos trabalhadores.
+                    Disparidade racial acima da média
+                    setorial (21%).
+                  </p>
+                </div>
+
+                <div class="cluster-card profile-c">
+                  <h3>Perfil C · Administrativo/gestão</h3>
+                  <p>
+                    15% dos trabalhadores.
+                    Disparidade concentrada em cargos
+                    de liderança (26%).
+                  </p>
+                </div>
+
+                <div class="cluster-card profile-d">
+                  <h3>Perfil D · Especialistas</h3>
+                  <p>
+                    9% dos trabalhadores.
+                    Menor disparidade relativa do
+                    recorte (12%).
+                  </p>
+                </div>
+
+              </div>
+
+            </div>
+
+          </section>
+
+        </section>
+
+
+        <!-- Tela 3: Explicabilidade (SHAP) -->
+        <section class="screen" id="screen-shap">
+
+          <p class="lede">
+            Peso relativo de cada variável na composição da renda,
+            segundo o modelo de regressão treinado sobre o recorte,
+            explicado via SHAP. Selecione um perfil para ver os
+            pesos específicos daquele cluster.
+          </p>
+
+          <section class="block">
+            <div class="block-head">
+              <h2>Peso das variáveis na renda</h2>
+            </div>
+
+            <div class="shap-controls">
+              <div class="field">
+                <label for="f-cluster">Perfil (cluster)</label>
+                <select id="f-cluster">
+                  <option>Perfil A — Serviços gerais</option>
+                  <option>Perfil B — Técnico</option>
+                  <option>Perfil C — Administrativo/gestão</option>
+                  <option>Perfil D — Especialistas</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Barras de Impacto SHAP -->
+            <div class="bar-row">
+              <div class="bar-label">Qualificação/cargo</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-qualificacao">
+                  <span>0,41</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-label">Gênero</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-genero">
+                  <span>0,29</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-label">Localização</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-localizacao">
+                  <span>0,17</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bar-row">
+              <div class="bar-label">Raça</div>
+              <div class="bar-track">
+                <div class="bar-fill bar-raca">
+                  <span>0,13</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="callout">
+              No Perfil A (Serviços gerais), gênero responde por
+              29% do peso explicativo sobre a renda — acima da
+              média do recorte (22%) — indicando prioridade para
+              políticas de capacitação voltadas a esse perfil.
+            </div>
+
+          </section>
+
+        </section>
+
+
+        <!-- Tela 4: Ranking de Disparidade -->
+        <section class="screen" id="screen-ranking">
+
+          <p class="lede">
+            Municípios e setores do recorte ordenados pelo índice
+            de disparidade salarial, para priorização de políticas
+            públicas de capacitação profissional.
+          </p>
+
+          <section class="block">
+            <div class="block-head">
+              <h2>Ranking de disparidade</h2>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th class="col-rank">#</th>
+                  <th>Município</th>
+                  <th>Setor</th>
+                  <th class="num">Trabalhadores</th>
+                  <th class="num">Índice de disparidade</th>
+                  <th class="col-priority">Prioridade</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="top">
+                  <td><span class="rank-badge">1</span></td>
+                  <td>Guarulhos (SP)</td>
+                  <td>Indústria Automotiva</td>
+                  <td class="num">48.200</td>
+                  <td class="num">31,2%</td>
+                  <td><span class="pill high">Alta</span></td>
+                </tr>
+
+                <tr class="top">
+                  <td><span class="rank-badge">2</span></td>
+                  <td>Osasco (SP)</td>
+                  <td>Comércio Varejista</td>
+                  <td class="num">36.900</td>
+                  <td class="num">28,7%</td>
+                  <td><span class="pill high">Alta</span></td>
+                </tr>
+
+                <tr class="top">
+                  <td><span class="rank-badge">3</span></td>
+                  <td>Campinas (SP)</td>
+                  <td>Tecnologia da Informação</td>
+                  <td class="num">52.500</td>
+                  <td class="num">26,1%</td>
+                  <td><span class="pill high">Alta</span></td>
+                </tr>
+
+                <tr>
+                  <td><span class="rank-badge">4</span></td>
+                  <td>São Bernardo do Campo (SP)</td>
+                  <td>Indústria Automotiva</td>
+                  <td class="num">41.100</td>
+                  <td class="num">22,4%</td>
+                  <td><span class="pill mid">Média</span></td>
+                </tr>
+
+                <tr>
+                  <td><span class="rank-badge">5</span></td>
+                  <td>Sorocaba (SP)</td>
+                  <td>Construção Civil</td>
+                  <td class="num">18.300</td>
+                  <td class="num">19,8%</td>
+                  <td><span class="pill mid">Média</span></td>
+                </tr>
+
+                <tr>
+                  <td><span class="rank-badge">6</span></td>
+                  <td>Ribeirão Preto (SP)</td>
+                  <td>Saúde</td>
+                  <td class="num">22.700</td>
+                  <td class="num">14,3%</td>
+                  <td><span class="pill low">Baixa</span></td>
+                </tr>
+              </tbody>
+            </table>
+
+          </section>
+
+        </section>
+
+        <!-- Tela 5: Configurações -->
+        <section class="screen" id="screen-settings">
+
+          <p class="lede">
+            Gerencie seus dados de acesso, preferências de exibição
+            do dashboard e as opções padrão usadas nas análises de
+            disparidade salarial.
+          </p>
+
+          <!-- Grade 2 colunas x 3 linhas -->
+          <div class="settings-grid">
+
+            <!-- Perfil -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Perfil</h2>
+              </div>
+              <p class="block-desc">
+                Informações usadas para identificar você dentro da equipe.
+              </p>
+
+              <div class="settings-profile">
+                <div class="settings-avatar">FS</div>
+                <div>
+                  <div class="settings-profile-name">Felipe Salinas Caodaglio</div>
+                  <div class="settings-profile-sub">RA 25005976 · Equipe WageGap AI</div>
+                </div>
+              </div>
+
+              <div class="settings-fields-row">
+                <div class="field">
+                  <label for="set-nome">Nome completo</label>
+                  <input type="text" id="set-nome" value="Felipe Salinas Caodaglio">
+                </div>
+                <div class="field">
+                  <label for="set-email">E-mail</label>
+                  <input type="email" id="set-email" value="felipe.salinas@exemplo.com">
+                </div>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Alterar senha</div>
+                  <div class="settings-row-desc">Recomendado a cada 90 dias para manter a conta segura.</div>
+                </div>
+                <button type="button" class="btn-outline-sm">Alterar senha</button>
+              </div>
+            </section>
+
+            <!-- Aparência -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Aparência</h2>
+              </div>
+              <p class="block-desc">
+                Ajuste como o dashboard é exibido para você.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Modo claro / escuro</div>
+                  <div class="settings-row-desc">Alterna entre o tema claro padrão e um tema escuro para ambientes com pouca luz.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="set-theme">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Idioma</div>
+                  <div class="settings-row-desc">Idioma usado nos textos e rótulos do dashboard.</div>
+                </div>
+                <select id="set-idioma">
+                  <option>Português (Brasil)</option>
+                  <option>English (US)</option>
+                  <option>Español</option>
+                </select>
+              </div>
+            </section>
+
+            <!-- Preferências de análise -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Preferências de análise</h2>
+              </div>
+              <p class="block-desc">
+                Recorte carregado automaticamente ao abrir o dashboard.
+              </p>
+
+              <div class="settings-fields-row">
+                <div class="field">
+                  <label for="set-uf">UF padrão</label>
+                  <select id="set-uf">
+                    <option>São Paulo (SP)</option>
+                    <option>Bahia (BA)</option>
+                    <option>Amazonas (AM)</option>
+                    <option>Rio Grande do Sul (RS)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="set-ano">Ano padrão</label>
+                  <select id="set-ano">
+                    <option>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <!-- Notificações -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Notificações</h2>
+              </div>
+              <p class="block-desc">
+                Escolha como quer ser avisado sobre novidades nos dados.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Atualização de dados (RAIS/CAGED)</div>
+                  <div class="settings-row-desc">Avisar quando um novo recorte for processado pelo pipeline de dados.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Resumo semanal por e-mail</div>
+                  <div class="settings-row-desc">Principais mudanças no ranking de disparidade da semana.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </section>
+
+            <!-- Segurança -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Segurança</h2>
+              </div>
+              <p class="block-desc">
+                Camadas extras de proteção para sua conta.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Autenticação em duas etapas</div>
+                  <div class="settings-row-desc">Exige um código adicional enviado por e-mail a cada novo login.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </section>
+
+            <!-- Dados e conta -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Dados e conta</h2>
+              </div>
+              <p class="block-desc">
+                Exportação dos seus dados ou encerramento da conta.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Exportar dados</div>
+                  <div class="settings-row-desc">Baixe um arquivo CSV com os recortes e análises salvos.</div>
+                </div>
+                <button type="button" class="btn-outline-sm">Exportar CSV</button>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Excluir conta</div>
+                  <div class="settings-row-desc">Remove permanentemente seu acesso e preferências salvas.</div>
+                </div>
+                <button type="button" class="btn-text-danger">Excluir conta</button>
+              </div>
+            </section>
+
+          </div>
+
+        </section>
+
+        <!-- Rodapé da Página -->
+        <footer class="page-note">
+          Protótipo navegável · WageGap AI · dados fictícios
+          ilustrativos para fins de demonstração
+        </footer>
+
+      </div>
+      <!-- Fim do Conteúdo das Telas -->
+
+    </main>
+    <!-- Fim da Área Principal -->
+
+  </div>
+
+  <!-- Script JavaScript -->
+  <script src="../assets/js/dashboard.js"></script>
+
+</body>
+</html>

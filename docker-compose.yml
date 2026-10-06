@@ -1,0 +1,21 @@
+services:
+  # Serviço do Front-end
+  frontend:
+    build: ./Front-end
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Front-end:/usr/share/nginx/html
+
+  # Serviço do Banco de Dados
+  database:
+    image: mysql:8.0
+    container_name: wagegap_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wagegap_db
+      MYSQL_USER: dev_user
+      MYSQL_PASSWORD: devpassword
+    ports:
+      - "3307:3306"

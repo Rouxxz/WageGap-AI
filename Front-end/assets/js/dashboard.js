@@ -1,13 +1,4 @@
-/*
-  dashboard.js
-  ------------
-  Interações do dashboard (dashboard.html): navegação entre telas,
-  título/breadcrumb, modo claro/escuro e botão "Sair da conta".
-*/
-
-/* Só os botões que têm destino (data-target). O botão "Sair da conta"
-   também usa a classe .nav-item, mas não troca de tela. */
-const navItems = document.querySelectorAll('.nav-item[data-target]');
+const navItems = document.querySelectorAll('.nav-item');
 
 const screens = document.querySelectorAll('.screen');
 
@@ -145,7 +136,7 @@ navItems.forEach(btn => {
 
   logoutBtn.addEventListener('click', async () => {
     await fetch('/api/logout', { method:'POST' });
-    window.location.href = 'login.html';
+    window.location.href = '../Login/login.html';
   });
 */
 
@@ -154,7 +145,7 @@ const logoutBtn = document.getElementById('logout-btn');
 if(logoutBtn){
 
   logoutBtn.addEventListener('click', () => {
-    window.location.href = 'login.html';
+    window.location.href = '../Login/login.html';
   });
 
 }
@@ -166,7 +157,7 @@ if(themeToggle){
 
   const TEMA_SALVO_KEY = 'wagegap-theme';
 
-  /* Aplica o tema salvo (se houver) assim que a página carrega */
+  / Aplica o tema salvo (se houver) assim que a página carrega /
   const temaSalvo = localStorage.getItem(TEMA_SALVO_KEY);
 
   if(temaSalvo === 'dark'){
@@ -174,7 +165,7 @@ if(themeToggle){
     themeToggle.checked = true;
   }
 
-  /* Alterna o tema quando o switch é clicado */
+  / Alterna o tema quando o switch é clicado */
   themeToggle.addEventListener('change', () => {
 
     const modoEscuro = themeToggle.checked;

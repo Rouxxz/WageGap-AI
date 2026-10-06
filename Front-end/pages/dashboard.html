@@ -1,22 +1,4 @@
 <!DOCTYPE html>
-
-<!--
-  index.html
-  ----------
-  Porta de entrada do site. Apenas redireciona para a tela de acesso
-  (pages/login.html). Quando houver sessão real, aqui pode decidir entre
-  pages/login.html (sem login) e pages/dashboard.html (com login).
--->
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=pages/login.html">
-  <title>WageGap AI</title>
-</head>
-<body>
-  <script>window.location.replace("pages/login.html");</script>
-  <a href="pages/login.html">Login</a>
-
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -28,7 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Estilos CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
@@ -102,6 +84,18 @@
         </button>
 
       </nav>
+
+      <!-- Sair da conta -->
+      <div class="nav-logout-wrap">
+        <button class="nav-item nav-logout" id="logout-btn">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <path d="M16 17l5-5-5-5"/>
+            <path d="M21 12H9"/>
+          </svg>
+          Sair da conta
+        </button>
+      </div>
 
       <!-- Rodapé da Sidebar (Informações do Recorte Ativo) -->
       <div class="sidebar-footer">
@@ -508,6 +502,201 @@
 
         </section>
 
+        <!-- Tela 5: Configurações -->
+        <section class="screen" id="screen-settings">
+
+          <p class="lede">
+            Gerencie seus dados de acesso, preferências de exibição
+            do dashboard e as opções padrão usadas nas análises de
+            disparidade salarial.
+          </p>
+
+          <!-- Grade 2 colunas x 3 linhas -->
+          <div class="settings-grid">
+
+            <!-- Perfil -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Perfil</h2>
+              </div>
+              <p class="block-desc">
+                Informações usadas para identificar você dentro da equipe.
+              </p>
+
+              <div class="settings-profile">
+                <div class="settings-avatar">FS</div>
+                <div>
+                  <div class="settings-profile-name">Felipe Salinas Caodaglio</div>
+                  <div class="settings-profile-sub">RA 25005976 · Equipe WageGap AI</div>
+                </div>
+              </div>
+
+              <div class="settings-fields-row">
+                <div class="field">
+                  <label for="set-nome">Nome completo</label>
+                  <input type="text" id="set-nome" value="Felipe Salinas Caodaglio">
+                </div>
+                <div class="field">
+                  <label for="set-email">E-mail</label>
+                  <input type="email" id="set-email" value="felipe.salinas@exemplo.com">
+                </div>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Alterar senha</div>
+                  <div class="settings-row-desc">Recomendado a cada 90 dias para manter a conta segura.</div>
+                </div>
+                <button type="button" class="btn-outline-sm">Alterar senha</button>
+              </div>
+            </section>
+
+            <!-- Aparência -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Aparência</h2>
+              </div>
+              <p class="block-desc">
+                Ajuste como o dashboard é exibido para você.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Modo claro / escuro</div>
+                  <div class="settings-row-desc">Alterna entre o tema claro padrão e um tema escuro para ambientes com pouca luz.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="set-theme">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Idioma</div>
+                  <div class="settings-row-desc">Idioma usado nos textos e rótulos do dashboard.</div>
+                </div>
+                <select id="set-idioma">
+                  <option>Português (Brasil)</option>
+                  <option>English (US)</option>
+                  <option>Español</option>
+                </select>
+              </div>
+            </section>
+
+            <!-- Preferências de análise -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Preferências de análise</h2>
+              </div>
+              <p class="block-desc">
+                Recorte carregado automaticamente ao abrir o dashboard.
+              </p>
+
+              <div class="settings-fields-row">
+                <div class="field">
+                  <label for="set-uf">UF padrão</label>
+                  <select id="set-uf">
+                    <option>São Paulo (SP)</option>
+                    <option>Bahia (BA)</option>
+                    <option>Amazonas (AM)</option>
+                    <option>Rio Grande do Sul (RS)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="set-ano">Ano padrão</label>
+                  <select id="set-ano">
+                    <option>2024</option>
+                    <option>2023</option>
+                    <option>2022</option>
+                  </select>
+                </div>
+              </div>
+            </section>
+
+            <!-- Notificações -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Notificações</h2>
+              </div>
+              <p class="block-desc">
+                Escolha como quer ser avisado sobre novidades nos dados.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Atualização de dados (RAIS/CAGED)</div>
+                  <div class="settings-row-desc">Avisar quando um novo recorte for processado pelo pipeline de dados.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Resumo semanal por e-mail</div>
+                  <div class="settings-row-desc">Principais mudanças no ranking de disparidade da semana.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </section>
+
+            <!-- Segurança -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Segurança</h2>
+              </div>
+              <p class="block-desc">
+                Camadas extras de proteção para sua conta.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Autenticação em duas etapas</div>
+                  <div class="settings-row-desc">Exige um código adicional enviado por e-mail a cada novo login.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="switch-slider"></span>
+                </label>
+              </div>
+            </section>
+
+            <!-- Dados e conta -->
+            <section class="block">
+              <div class="block-head">
+                <h2>Dados e conta</h2>
+              </div>
+              <p class="block-desc">
+                Exportação dos seus dados ou encerramento da conta.
+              </p>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Exportar dados</div>
+                  <div class="settings-row-desc">Baixe um arquivo CSV com os recortes e análises salvos.</div>
+                </div>
+                <button type="button" class="btn-outline-sm">Exportar CSV</button>
+              </div>
+
+              <div class="settings-row">
+                <div>
+                  <div class="settings-row-title">Excluir conta</div>
+                  <div class="settings-row-desc">Remove permanentemente seu acesso e preferências salvas.</div>
+                </div>
+                <button type="button" class="btn-text-danger">Excluir conta</button>
+              </div>
+            </section>
+
+          </div>
+
+        </section>
+
         <!-- Rodapé da Página -->
         <footer class="page-note">
           Protótipo navegável · WageGap AI · dados fictícios
@@ -523,7 +712,7 @@
   </div>
 
   <!-- Script JavaScript -->
-  <script src="script.js"></script>
+  <<script src="../assets/js/dashboard.js"></script>
 
 </body>
 </html>

@@ -1,5 +1,5 @@
 services:
-  # Serviço do Front-end
+  # Serviço do Front-end (Nginx)
   frontend:
     build: ./Front-end
     ports:
@@ -7,7 +7,23 @@ services:
     volumes:
       - ./Front-end:/usr/share/nginx/html
 
-  # Serviço do Banco de Dados
+  # Serviço do Back-end (FastAPI)
+  backend:
+    build: ./Back-end
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: database
+      DB_USER: dev_user
+      DB_PASSWORD: devpassword
+      DB_NAME: wagegap_db
+      DB_PORT: 3306
+    depends_on:
+      - database
+    volumes:
+      - ./Back-end:/app
+
+  # Serviço do Banco de Dados (MySQL 8.0)
   database:
     image: mysql:8.0
     container_name: wagegap_mysql

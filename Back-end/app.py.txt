@@ -1,0 +1,74 @@
+from flask import Flask, jsonify, request
+from flask_cors import CORS
+import pymysql
+import os
+
+app = Flask(__name__)
+CORS(app)  # Permite que o front-end consulte esta API
+
+# Configuração da conexão com o banco de dados MySQL
+def get_db_connection():
+    return pymysql.connect(
+        host=os.getenv('DB_HOST', 'localhost'),
+        user=os.getenv('DB_USER', 'root'),
+        password=os.getenv('DB_PASSWORD', ''),
+        database=os.getenv('DB_NAME', 'wagegap_db'),
+        cursorclass=pymysql.cursors.DictCursor
+    )
+
+@app.route('/api/kpis', methods=['GET'])
+def get_kpis():
+    # Retorna os indicadores resumidos do painel
+    return jsonify({
+        "disparidade_media": 23.4,
+        "municipios_analisados": 350,
+        "clusters_identificados": 6,
+        "trabalhadores_cobertos": 1200000
+    })
+
+@app.route('/api/clusters', methods=['GET'])
+def get_clusters():
+    # Consulta os perfis de trabalhadores cadastrados no banco
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM clusters")
+            data = cursor.fetchall()
+        conn.close()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/shap', methods=['GET'])
+def get_shap():
+    # Retorna o peso das variáveis na renda (XAI)
+    return jsonify({
+        "qualificacao": 0.42,
+        "genero": 0.29,
+        "localizacao": 0.17,
+        "raca": 0.12
+    })
+
+@app.route('/api/ranking', methods=['GET'])
+def get_ranking():
+    # Consulta o ranking de disparidade salarial por município e setor
+    try:
+        conn = get_db_connection()
+        with conn.cursor() as cursor:
+            query = """
+                SELECT m.nome AS municipio, s.nome_setor AS setor, 
+                       r.total_trabalhadores, r.indice_disparidade, r.prioridade_politica
+                FROM registros_salariais r
+                JOIN municipios m ON r.id_municipio = m.id_municipio
+                JOIN setores s ON r.id_setor = s.id_setor
+                ORDER BY r.indice_disparidade DESC;
+            """
+            cursor.execute(query)
+            data = cursor.fetchall()
+        conn.close()
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

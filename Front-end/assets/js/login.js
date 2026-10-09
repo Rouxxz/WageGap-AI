@@ -564,3 +564,35 @@ requestAnimationFrame(() => {
     slider.classList.remove('no-transition');
   });
 });
+/* ============================================= */
+/* TERMOS DE USO / POLÍTICA DE PRIVACIDADE        */
+/* Abre o documento num modal, na mesma aba       */
+/* ============================================= */
+const legalModal = document.getElementById('legal-modal');
+const legalFrame = document.getElementById('legal-modal-frame');
+
+document.querySelectorAll('[data-legal]').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    legalFrame.src = link.getAttribute('href');
+    legalFrame.title = link.textContent;
+    legalModal.showModal();
+  });
+});
+
+function fecharLegal(){
+  legalModal.close();
+}
+
+document.getElementById('legal-modal-close').addEventListener('click', fecharLegal);
+document.getElementById('legal-modal-ok').addEventListener('click', fecharLegal);
+
+/* Clique no fundo escuro (fora do cartão) também fecha */
+legalModal.addEventListener('click', (e) => {
+  if(e.target === legalModal) fecharLegal();
+});
+
+/* Esvazia o iframe ao fechar (Esc ou botões) para não guardar a rolagem antiga */
+legalModal.addEventListener('close', () => {
+  legalFrame.removeAttribute('src');
+});

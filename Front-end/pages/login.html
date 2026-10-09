@@ -93,7 +93,7 @@
 
         <label class="check-row">
           <input type="checkbox" class="check-input" id="su-termos">
-          <span>Li e concordo com os <span class="link-gold">Termos de uso</span> e a <span class="link-gold">Política de privacidade</span>.</span>
+          <span>Li e concordo com os <a class="link-gold" href="termos-de-uso.html" data-legal>Termos de uso</a> e a <a class="link-gold" href="politica-de-privacidade.html" data-legal>Política de privacidade</a>.</span>
         </label>
         <div class="field-error-msg" id="su-termos-error"></div>
 
@@ -216,6 +216,27 @@
   </div>
 
 </div>
+
+<!--
+  Modal dos Termos de uso / Política de privacidade.
+  Os links com [data-legal] abrem o documento aqui dentro (iframe),
+  sem sair da tela de cadastro. Ao fechar, o formulário continua como estava.
+-->
+<dialog class="legal-modal" id="legal-modal" aria-labelledby="legal-modal-title">
+  <div class="legal-modal-head">
+    <div class="legal-brand">
+      <div class="auth-logo-mark">W</div>
+      <div class="auth-logo-name" id="legal-modal-title">WageGap AI</div>
+    </div>
+    <button type="button" class="legal-modal-close" id="legal-modal-close" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <iframe class="legal-modal-frame" id="legal-modal-frame" title="Documento legal"></iframe>
+  <div class="legal-modal-foot">
+    <button type="button" class="btn-apply" id="legal-modal-ok">Fechar</button>
+  </div>
+</dialog>
 
 <script src="../assets/js/login.js"></script>
 </body>

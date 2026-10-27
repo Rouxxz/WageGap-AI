@@ -109,33 +109,13 @@ navItems.forEach(btn => {
 });
 
 
-
-
-/*
-  ================================
-  SAIR DA CONTA
-  ================================
-  Por enquanto não existe sessão/token real (ver nota em login.js),
-  então "sair" apenas manda a pessoa de volta para a tela de login.
-
-  Quando o backend tiver autenticação de verdade, é aqui que entra
-  a chamada para invalidar o token/sessão antes do redirecionamento,
-  por exemplo:
-
-  logoutBtn.addEventListener('click', async () => {
-    await fetch('/api/logout', { method:'POST' });
-    window.location.href = '../Login/login.html';
-  });
-*/
-
 const logoutBtn = document.getElementById('logout-btn');
-
 if(logoutBtn){
-
   logoutBtn.addEventListener('click', () => {
-    window.location.href = '../Login/login.html';
+    // Apaga a sessão (token/dados) do navegador garantindo a segurança
+    localStorage.removeItem('user'); 
+    window.location.href = '../pages/login.html';
   });
-
 }
 
 

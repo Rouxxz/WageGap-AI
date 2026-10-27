@@ -56,9 +56,7 @@ CREATE TABLE IF NOT EXISTS registros_salariais (
     FOREIGN KEY (id_setor) REFERENCES setores(id_setor)
 );
 
--- ========================================================
 -- INSERÇÃO DE DADOS DE TESTE (SEEDING)
--- ========================================================
 
 -- Inserir Empresa de Teste
 INSERT INTO empresas (razao_social, cnpj) VALUES

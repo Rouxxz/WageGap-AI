@@ -39,9 +39,7 @@ const successNote = document.getElementById('fp-success');
 const successText = document.getElementById('fp-success-text');
 
 
-/* ========================= */
 /* VALIDAÇÃO DO FORMULÁRIO   */
-/* ========================= */
 
 function emailValido(valor){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
@@ -73,9 +71,7 @@ function validarFormulario(){
 }
 
 
-/* ========================= */
 /* ENVIO (simulado)          */
-/* ========================= */
 
 /*
   Troque esta função por uma chamada real ao backend

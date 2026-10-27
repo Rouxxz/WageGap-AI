@@ -12,21 +12,11 @@
     3) validar os dois formulários antes de enviar
     4) simular o envio (loading no botão) e redirecionar
 
-  Por enquanto o projeto ainda não tem endpoints de autenticação
-  no backend (/backend/app/main.py só tem os 4 endpoints de dados:
-  /api/kpis, /api/clusters, /api/shap, /api/ranking). Por isso o
-  envio é SIMULADO. Quando existirem rotas reais (ex: POST
-  /api/login e POST /api/signup), é só trocar as funções
-  `fakeLoginRequest` e `fakeSignupRequest` por chamadas fetch() —
-  validação, loading e mensagens de erro continuam iguais.
-
-  Dica: abrir login.html#cadastro já mostra a tela de criar conta.
+    
 */
 
 
-/* ========================= */
 /* ELEMENTOS DA TELA         */
-/* ========================= */
 
 const slider = document.getElementById('auth-slider');
 
@@ -73,26 +63,7 @@ const signupAlertText = document.getElementById('signup-alert-text');
 
 const signupSubmitBtn = document.getElementById('signup-submit');
 
-
-/*
-  Credenciais de demonstração.
-  Só existem aqui porque ainda não há backend de autenticação.
-  Remover assim que o login real estiver pronto.
-*/
-const DEMO_EMAIL = 'demo@wagegap.ai';
-const DEMO_SENHA = '123456';
-
-/*
-  E-mails que o "backend simulado" já considera cadastrados.
-  Serve só para mostrar como fica o erro de "e-mail já existe".
-  Remover quando o cadastro real estiver pronto.
-*/
-const EMAILS_JA_CADASTRADOS = ['demo@wagegap.ai'];
-
-
-/* ========================= */
 /* ALTERNAR LOGIN / CADASTRO */
-/* ========================= */
 
 /*
   modo = 'login' ou 'cadastro'.
@@ -149,9 +120,7 @@ document.querySelectorAll('[data-modo-alvo]').forEach((botao) => {
 });
 
 
-/* ========================= */
 /* MOSTRAR / OCULTAR SENHA   */
-/* ========================= */
 
 function configurarToggleSenha(botaoId, inputEl){
 
@@ -179,9 +148,7 @@ configurarToggleSenha('toggle-su-senha', suSenhaInput);
 configurarToggleSenha('toggle-su-senha2', suSenha2Input);
 
 
-/* ========================= */
 /* VALIDAÇÃO                 */
-/* ========================= */
 
 function emailValido(valor){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor);
@@ -326,74 +293,51 @@ function validarSignup(){
 
 }
 
+/* ENVIO (Integrado ao FastAPI) */
 
-/* ========================= */
-/* ENVIO (simulado)          */
-/* ========================= */
-
-/*
-  Troque esta função por uma chamada real ao backend
-  quando o endpoint de login existir, por exemplo:
-
-  async function fakeLoginRequest(email, senha){
-    const resp = await fetch('/api/login', {
+async function fakeLoginRequest(email, senha){
+  try {
+    const resp = await fetch('http://localhost:8000/api/auth/login', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, senha })
     });
-    if(!resp.ok) throw new Error('Credenciais inválidas');
-    return resp.json();
+    
+    const data = await resp.json();
+    
+    if(!resp.ok) {
+      throw new Error(data.detail || 'Credenciais inválidas');
+    }
+    
+    // Salva o usuário na sessão do navegador
+    localStorage.setItem('user', JSON.stringify(data.user));
+    return { ok: true };
+    
+  } catch (error) {
+    throw error;
   }
-*/
-function fakeLoginRequest(email, senha){
-
-  return new Promise((resolve, reject) => {
-
-    setTimeout(() => {
-
-      if(email === DEMO_EMAIL && senha === DEMO_SENHA){
-        resolve({ ok:true });
-      } else {
-        reject(new Error('Credenciais inválidas'));
-      }
-
-    }, 900);
-
-  });
-
 }
 
-
-/*
-  Troque esta função por uma chamada real ao backend
-  quando o endpoint de cadastro existir, por exemplo:
-
-  async function fakeSignupRequest(dados){
-    const resp = await fetch('/api/signup', {
+async function fakeSignupRequest(dados){
+  try {
+    const resp = await fetch('http://localhost:8000/api/auth/signup', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: {'Content-Type': 'application/json'},
+      // O seu front envia 'nome', 'email', 'senha'. O back-end já está preparado para receber.
       body: JSON.stringify(dados)
     });
-    if(!resp.ok) throw new Error('E-mail já cadastrado');
-    return resp.json();
+    
+    const data = await resp.json();
+    
+    if(!resp.ok) {
+      throw new Error(data.detail || 'E-mail já cadastrado');
+    }
+    
+    return { ok: true };
+    
+  } catch (error) {
+    throw error;
   }
-*/
-function fakeSignupRequest(dados){
-
-  return new Promise((resolve, reject) => {
-
-    setTimeout(() => {
-
-      if(EMAILS_JA_CADASTRADOS.includes(dados.email)){
-        reject(new Error('E-mail já cadastrado'));
-      } else {
-        resolve({ ok:true });
-      }
-
-    }, 900);
-
-  });
-
 }
 
 
@@ -537,10 +481,7 @@ termosInput.addEventListener('change', () => {
   termosError.textContent = '';
 });
 
-
-/* ========================= */
-/* ESTADO INICIAL            */
-/* ========================= */
+/* ESTADO INICIAL            *
 
 /* Abre direto em "criar conta" se o endereço terminar com #cadastro */
 if(location.hash === '#cadastro'){

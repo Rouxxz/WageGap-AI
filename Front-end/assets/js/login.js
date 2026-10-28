@@ -1,3 +1,8 @@
+/*  PROTEÇÃO DE ROTA: Redireciona se já estiver logado */
+if (localStorage.getItem('user')) {
+    window.location.href = 'dashboard.html';
+}
+
 /*
   login.js
   ---------

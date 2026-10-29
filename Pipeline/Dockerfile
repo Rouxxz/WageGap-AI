@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 && rm 
 WORKDIR /app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# timeout maior: pyarrow, lightgbm e shap são grandes e a rede pode oscilar
+RUN pip install --no-cache-dir --default-timeout=300 --retries 10 -r requirements.txt
 
 COPY . .
 

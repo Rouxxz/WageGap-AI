@@ -1,4 +1,5 @@
 """Passo 1: download da RAIS (FTP do MTE) e da lista de municípios do IBGE."""
+import gzip
 import json
 import shutil
 import urllib.request
@@ -44,7 +45,11 @@ def extrair_rais(arquivo_7z, ano):
 def carregar_municipios_ibge():
     # a RAIS usa o código do IBGE sem o último dígito
     arquivo = baixar(IBGE_MUNICIPIOS_URL, RAW_DIR / "municipios_ibge.json")
-    dados = json.loads(arquivo.read_text(encoding="utf-8"))
+    conteudo = arquivo.read_bytes()
+    # a API do IBGE às vezes responde em gzip mesmo sem a gente pedir
+    if conteudo[:2] == b"\x1f\x8b":
+        conteudo = gzip.decompress(conteudo)
+    dados = json.loads(conteudo.decode("utf-8"))
     return {m["id"] // 10: (m["nome"], _sigla_uf(m)) for m in dados}
 
 

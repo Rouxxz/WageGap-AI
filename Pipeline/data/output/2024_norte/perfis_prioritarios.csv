@@ -1,0 +1,9 @@
+﻿cluster;nome_cluster;total_trabalhadores;perc_mulheres;perc_negros;perc_baixa_qualificacao;trabalhadores_publico_alvo;disparidade_genero_ajustada;disparidade_raca_ajustada;ganho_qualificacao;perda_mensal_genero;ganho_mensal_qualificacao;componente_desigualdade;componente_qualificacao;componente_escala;indice_prioridade;prioridade;publico_alvo
+7;Serviços e comércio · Administração pública · experientes;148501.0;34.13;82.69;29.65;44029.0;13.66;3.44;10.57;21489230.08;14771857.44;0.75;1.0;0.38;74.38;Alta;Mulheres com até ensino médio incompleto
+6;Serviços e comércio · Serviços · experientes;357261.0;26.49;77.9;41.4;147921.0;12.14;4.13;5.9;28264829.27;21567106.67;0.5;0.88;0.62;66.25;Alta;Mulheres com até ensino médio incompleto
+1;Produção industrial · Serviços · jovens;464308.0;27.73;86.94;21.66;100591.0;10.02;3.08;4.81;30812570.24;11105679.66;0.38;0.75;0.88;63.12;Media;Mulheres com ensino médio (qualificação técnica)
+5;Profissionais das ciências e das artes · Administração pública;161724.0;52.03;77.67;0.0;0.0;9.4;7.49;0.0;40087242.92;0.0;1.0;0.19;0.5;59.06;Media;Mulheres negras com ensino médio (qualificação técnica)
+4;Serviços administrativos · Serviços · jovens;420981.0;48.52;75.08;2.19;9228.0;7.1;4.44;3.21;48678137.75;662599.34;0.62;0.38;0.75;56.88;Baixa;Mulheres com ensino médio (qualificação técnica)
+2;Serviços e comércio · Comércio · jovens;467035.0;40.19;83.16;11.88;55506.0;5.84;3.42;1.92;23674059.48;2039855.47;0.25;0.5;1.0;52.5;Baixa;Mulheres com ensino médio (qualificação técnica)
+0;Profissionais das ciências e das artes · Administração pública · experientes;84571.0;52.03;63.33;0.0;0.0;10.68;8.09;0.0;50839586.88;0.0;0.88;0.19;0.12;44.69;Baixa;Mulheres negras com ensino médio (qualificação técnica)
+3;Profissionais das ciências e das artes · Serviços · jornada parcial;86799.0;55.56;76.77;24.35;21135.0;4.28;2.73;2.21;6410933.51;277798.73;0.12;0.62;0.25;33.12;Baixa;Trabalhadores com ensino médio (qualificação técnica)

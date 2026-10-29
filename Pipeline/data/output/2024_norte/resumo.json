@@ -1,0 +1,19 @@
+{
+  "linhas_lidas": 5197236,
+  "vinculos_validos": 3020326,
+  "salario_hora_min": 2.67,
+  "salario_hora_max": 935.25,
+  "k_escolhido": 8,
+  "silhouette_por_k": {},
+  "clusters": 8,
+  "nichos": 900,
+  "diagnostico": {
+    "disparidade_genero_ajustada": 8.32,
+    "disparidade_raca_ajustada": 4.6,
+    "perda_mensal_genero": 524127810.03,
+    "perda_mensal_raca": 486336848.3,
+    "trabalhadores_baixa_qualificacao": 491836,
+    "ganho_qualificacao_medio": 6.94,
+    "ganho_mensal_qualificacao": 93108550.83
+  }
+}

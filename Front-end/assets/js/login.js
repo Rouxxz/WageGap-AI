@@ -313,7 +313,12 @@ async function fakeLoginRequest(email, senha){
     if(!resp.ok) {
       throw new Error(data.detail || 'Credenciais inválidas');
     }
-    
+
+    // com 2FA, o usuário só é salvo depois do código
+    if(data.requires_2fa) {
+      return { ok: true, requires2fa: true };
+    }
+
     // Salva o usuário na sessão do navegador
     localStorage.setItem('user', JSON.stringify(data.user));
     return { ok: true };
@@ -385,7 +390,13 @@ loginForm.addEventListener('submit', (evento) => {
   setLoadingLogin(true);
 
   fakeLoginRequest(email, senha)
-    .then(() => {
+    .then((resultado) => {
+
+      if(resultado.requires2fa){
+        setLoadingLogin(false);
+        abrirModalCodigo(email);
+        return;
+      }
 
       /*
         Login OK: em uma versão real aqui salvaríamos o token
@@ -536,6 +547,73 @@ document.getElementById('legal-modal-ok').addEventListener('click', fecharLegal)
 /* Clique no fundo escuro (fora do cartão) também fecha */
 legalModal.addEventListener('click', (e) => {
   if(e.target === legalModal) fecharLegal();
+});
+
+/* VERIFICAÇÃO EM DUAS ETAPAS */
+const codeModal = document.getElementById('code-modal');
+const codeForm = document.getElementById('code-form');
+const codeInput = document.getElementById('code-input');
+const codeError = document.getElementById('code-error');
+const codeSubmitBtn = document.getElementById('code-submit');
+
+let emailPendente2fa = null;
+
+function abrirModalCodigo(email){
+  emailPendente2fa = email;
+  codeForm.reset();
+  codeError.textContent = '';
+  codeInput.classList.remove('input-error');
+  codeModal.showModal();
+  codeInput.focus();
+}
+
+document.getElementById('code-cancel').addEventListener('click', () => {
+  codeModal.close();
+});
+
+/* só números */
+codeInput.addEventListener('input', () => {
+  codeInput.value = codeInput.value.replace(/\D/g, '');
+  codeInput.classList.remove('input-error');
+  codeError.textContent = '';
+});
+
+codeForm.addEventListener('submit', async (evento) => {
+
+  evento.preventDefault();
+
+  const codigo = codeInput.value.trim();
+
+  if(codigo.length !== 6){
+    codeError.textContent = 'Digite os 6 dígitos do código.';
+    codeInput.classList.add('input-error');
+    return;
+  }
+
+  codeSubmitBtn.disabled = true;
+
+  try {
+    const resp = await fetch('http://localhost:8000/api/auth/verify-2fa', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ email: emailPendente2fa, codigo })
+    });
+
+    const data = await resp.json();
+
+    if(!resp.ok) {
+      throw new Error(data.detail || 'Código inválido.');
+    }
+
+    localStorage.setItem('user', JSON.stringify(data.user));
+    window.location.href = 'dashboard.html';
+
+  } catch (error) {
+    codeSubmitBtn.disabled = false;
+    codeError.textContent = error.message;
+    codeInput.classList.add('input-error');
+  }
+
 });
 
 /* Esvazia o iframe ao fechar (Esc ou botões) para não guardar a rolagem antiga */

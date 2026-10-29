@@ -21,6 +21,17 @@ CREATE TABLE IF NOT EXISTS usuarios (
     FOREIGN KEY (id_empresa) REFERENCES empresas(id_empresa) ON DELETE SET NULL
 );
 
+-- 2.1 Preferências do usuário
+CREATE TABLE IF NOT EXISTS preferencias (
+    id_usuario INT PRIMARY KEY,
+    idioma VARCHAR(10) NOT NULL DEFAULT 'pt-BR',
+    tema VARCHAR(10) NOT NULL DEFAULT 'light',
+    notif_dados BOOLEAN NOT NULL DEFAULT TRUE,
+    notif_resumo BOOLEAN NOT NULL DEFAULT FALSE,
+    dois_fatores BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 -- 3. Tabela de Clusters
 CREATE TABLE IF NOT EXISTS clusters (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,7 +39,19 @@ CREATE TABLE IF NOT EXISTS clusters (
     descricao TEXT,
     media_salarial_homens DECIMAL(10,2),
     media_salarial_mulheres DECIMAL(10,2),
-    disparidade_percentual DECIMAL(5,2)
+    disparidade_percentual DECIMAL(5,2),
+    -- preenchidas pelo pipeline
+    total_trabalhadores INT NULL,
+    perc_mulheres DECIMAL(5,2) NULL,
+    perc_negros DECIMAL(5,2) NULL,
+    idade_media DECIMAL(5,1) NULL,
+    escolaridade_predominante VARCHAR(60) NULL,
+    ocupacao_predominante VARCHAR(80) NULL,
+    setor_predominante VARCHAR(80) NULL,
+    disparidade_raca DECIMAL(6,2) NULL,
+    ano INT NULL,
+    regiao VARCHAR(20) NULL,
+    numero INT NULL
 );
 
 -- 4. Tabela de Municípios
@@ -52,8 +75,44 @@ CREATE TABLE IF NOT EXISTS registros_salariais (
     total_trabalhadores INT NOT NULL,
     indice_disparidade DECIMAL(5,2) NOT NULL,
     prioridade_politica VARCHAR(50) NOT NULL,
+    ano INT NOT NULL DEFAULT 2024,
+    salario_medio_homens DECIMAL(10,2) NULL,
+    salario_medio_mulheres DECIMAL(10,2) NULL,
+    disparidade_raca DECIMAL(6,2) NULL,
+    -- diagnóstico (pipeline, passo 4)
+    indice_prioridade DECIMAL(5,1) NULL,
+    disparidade_genero_ajustada DECIMAL(6,2) NULL,
+    disparidade_raca_ajustada DECIMAL(6,2) NULL,
+    perc_baixa_qualificacao DECIMAL(5,2) NULL,
+    ganho_qualificacao DECIMAL(6,2) NULL,
+    publico_alvo VARCHAR(80) NULL,
+    perda_mensal_genero DECIMAL(14,2) NULL,
+    ganho_mensal_qualificacao DECIMAL(14,2) NULL,
     FOREIGN KEY (id_municipio) REFERENCES municipios(id_municipio),
     FOREIGN KEY (id_setor) REFERENCES setores(id_setor)
+);
+
+-- 7. Explicabilidade (pipeline). cluster_numero NULL = recorte inteiro
+CREATE TABLE IF NOT EXISTS shap_pesos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ano INT NOT NULL,
+    regiao VARCHAR(20) NOT NULL,
+    cluster_numero INT NULL,
+    grupo VARCHAR(40) NOT NULL,
+    peso_percentual DECIMAL(5,2) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS efeitos_ajustados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ano INT NOT NULL,
+    regiao VARCHAR(20) NOT NULL,
+    cluster_numero INT NULL,
+    variavel VARCHAR(20) NOT NULL,
+    bruta DECIMAL(6,2) NULL,
+    ajustada DECIMAL(6,2) NULL,
+    ic95_min DECIMAL(6,2) NULL,
+    ic95_max DECIMAL(6,2) NULL,
+    efeito_shap DECIMAL(6,2) NULL
 );
 
 -- INSERÇÃO DE DADOS DE TESTE (SEEDING)

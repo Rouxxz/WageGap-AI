@@ -709,6 +709,29 @@ tr.top .rank-badge{
 }
 
 
+.pill.na{
+  background:var(--paper);
+
+  color:var(--slate);
+}
+
+
+/* Segunda linha dentro da célula */
+.cell-sub{
+  font-size:11.5px;
+
+  color:var(--slate);
+
+  margin-top:3px;
+}
+
+
+/* Rolagem horizontal em telas pequenas */
+.table-scroll{
+  overflow-x:auto;
+}
+
+
 /* ========================= */
 /* CLUSTERS */
 /* ========================= */
@@ -804,6 +827,159 @@ tr.top .rank-badge{
 }
 
 
+/* Cards dos perfis (mesmo número da bolha) */
+.cluster-card{
+  border-left-color:var(--teal);
+}
+
+
+.cluster-card h3{
+  display:flex;
+
+  align-items:baseline;
+
+  gap:8px;
+}
+
+
+.cluster-numero{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:20px;
+  height:20px;
+
+  border-radius:50%;
+
+  background:var(--teal);
+
+  color:#fff;
+
+  font-size:11px;
+
+  flex-shrink:0;
+}
+
+
+.cluster-card .cluster-gaps{
+  margin-top:6px;
+
+  color:var(--ink);
+
+  font-weight:500;
+}
+
+
+.cluster-cards{
+  max-height:520px;
+
+  overflow-y:auto;
+
+  padding-right:4px;
+}
+
+
+.cluster-card.is-ativo{
+  border-color:var(--teal);
+
+  background:var(--teal-soft);
+}
+
+
+/* Gráfico de bolhas */
+.cluster-chart{
+  position:relative;
+}
+
+
+.chart-grid{
+  stroke:var(--line);
+
+  stroke-width:1;
+}
+
+
+.chart-eixo-texto{
+  font-family:var(--sans);
+
+  font-size:10px;
+
+  fill:var(--slate-soft);
+}
+
+
+.chart-bolha{
+  fill:var(--teal);
+
+  fill-opacity:0.78;
+
+  /* anel separa as bolhas sobrepostas */
+  stroke:var(--paper-card);
+
+  stroke-width:2;
+
+  cursor:pointer;
+
+  transition:fill-opacity .15s ease;
+}
+
+
+.chart-bolha:hover,
+.chart-bolha.is-ativo{
+  fill-opacity:1;
+}
+
+
+.chart-bolha-numero{
+  font-family:var(--sans);
+
+  font-size:11px;
+
+  font-weight:600;
+
+  fill:#fff;
+
+  pointer-events:none;
+}
+
+
+.chart-tooltip{
+  position:absolute;
+
+  z-index:5;
+
+  max-width:240px;
+
+  padding:9px 11px;
+
+  border:1px solid var(--line);
+
+  border-radius:6px;
+
+  background:var(--paper-card);
+
+  color:var(--ink);
+
+  font-size:12px;
+
+  line-height:1.5;
+
+  box-shadow:0 8px 20px -10px rgba(15,28,51,0.35);
+
+  pointer-events:none;
+}
+
+
+.chart-tooltip strong{
+  display:block;
+
+  margin-bottom:3px;
+}
+
+
 /* ========================= */
 /* SHAP */
 /* ========================= */
@@ -896,6 +1072,50 @@ tr.top .rank-badge{
   line-height:1.6;
 
   margin-top:6px;
+}
+
+
+:root[data-theme="dark"] .callout{
+  color:#E9C77A;
+}
+
+
+/* Cores das barras do SHAP */
+.bar-qualificacao{ background:var(--navy); }
+.bar-genero{ background:var(--gold); }
+.bar-localizacao{ background:var(--teal); }
+.bar-raca{ background:var(--rust); }
+.bar-outros{ background:var(--slate-soft); }
+
+:root[data-theme="dark"] .bar-qualificacao{
+  background:#5B7BB5;
+}
+
+
+/* Valor fora da barra, para caber nas bem curtas */
+.bar-valor{
+  width:52px;
+
+  font-size:12.5px;
+
+  font-weight:600;
+
+  color:var(--ink);
+
+  text-align:right;
+
+  flex-shrink:0;
+
+  font-variant-numeric:tabular-nums;
+}
+
+
+.shap-nota{
+  font-size:11.5px;
+
+  max-width:none;
+
+  margin:4px 0 14px 0;
 }
 
 
@@ -1268,4 +1488,174 @@ footer.page-note{
     grid-template-columns:1fr;
   }
 
+}
+
+/* ========================= */
+/* MODAIS DE CONFIGURAÇÕES   */
+/* ========================= */
+
+.settings-modal{
+  width:min(420px, calc(100vw - 32px));
+
+  padding:0;
+
+  border:1px solid var(--line);
+
+  border-radius:10px;
+
+  background:var(--paper-card);
+
+  color:var(--ink);
+
+  box-shadow:0 24px 60px -20px rgba(15,28,51,0.45);
+}
+
+
+.settings-modal::backdrop{
+  background:rgba(15,28,51,0.55);
+}
+
+
+.settings-modal-body{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:14px;
+
+  padding:24px;
+}
+
+
+.settings-modal-body h2{
+  font-family:var(--serif);
+
+  font-size:19px;
+
+  font-weight:600;
+
+  margin:0;
+}
+
+
+.settings-modal-text{
+  font-size:13px;
+
+  color:var(--slate);
+
+  line-height:1.5;
+
+  margin:0;
+}
+
+
+.settings-modal .field input{
+  font-family:var(--sans);
+
+  font-size:13.5px;
+
+  padding:9px 12px;
+
+  border:1px solid var(--line);
+
+  border-radius:5px;
+
+  background:var(--paper-card);
+
+  color:var(--ink);
+
+  width:100%;
+}
+
+
+.settings-modal .field input:focus{
+  outline:none;
+
+  border-color:var(--gold);
+
+  box-shadow:0 0 0 3px var(--gold-soft);
+}
+
+
+.settings-modal-error{
+  font-size:12px;
+
+  color:var(--rust);
+
+  min-height:16px;
+
+  margin:0;
+}
+
+
+.settings-modal-actions{
+  display:flex;
+
+  justify-content:flex-end;
+
+  gap:10px;
+}
+
+
+.btn-danger{
+  font-family:var(--sans);
+
+  font-size:13.5px;
+
+  font-weight:600;
+
+  padding:9px 18px;
+
+  background:var(--rust);
+
+  color:#fff;
+
+  border:none;
+
+  border-radius:5px;
+
+  cursor:pointer;
+}
+
+
+.btn-danger:hover{
+  filter:brightness(0.92);
+}
+
+
+.settings-modal button:disabled,
+.btn-outline-sm:disabled{
+  opacity:0.6;
+
+  cursor:wait;
+}
+
+
+/* ---------- Aviso rápido (toast) ---------- */
+.toast{
+  position:fixed;
+
+  right:24px;
+  bottom:24px;
+
+  z-index:1000;
+
+  max-width:min(360px, calc(100vw - 48px));
+
+  padding:12px 16px;
+
+  border-radius:6px;
+
+  background:var(--navy);
+
+  color:#fff;
+
+  font-size:13px;
+
+  box-shadow:0 12px 30px -12px rgba(15,28,51,0.5);
+}
+
+
+.toast.is-error{
+  background:var(--rust);
 }

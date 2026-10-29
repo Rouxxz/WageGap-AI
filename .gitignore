@@ -1,3 +1,7 @@
 __pycache__/
 *.pyc
 .env
+# dados brutos do pipeline (grandes)
+Pipeline/data/raw/
+Pipeline/data/interim/
+Pipeline/data/processed/

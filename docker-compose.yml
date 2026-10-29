@@ -23,6 +23,22 @@ services:
     volumes:
       - ./Back-end:/app
 
+  # Pipeline de dados. Não sobe com o "up", roda assim:
+  #   docker compose run --rm pipeline python -m src.run --ano 2024 --regiao NORTE
+  pipeline:
+    build: ./Pipeline
+    profiles: ["pipeline"]
+    environment:
+      DB_HOST: database
+      DB_USER: dev_user
+      DB_PASSWORD: devpassword
+      DB_NAME: wagegap_db
+      DB_PORT: 3306
+    depends_on:
+      - database
+    volumes:
+      - ./Pipeline:/app
+
   # Serviço do Banco de Dados (MySQL 8.0)
   database:
     image: mysql:8.0

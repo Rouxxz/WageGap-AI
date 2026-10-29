@@ -954,3 +954,42 @@
   .legal-modal{ height:calc(100vh - 32px); }
   .is-embedded .legal-card{ padding:22px 18px 26px 18px; }
 }
+
+
+/* ============================================= */
+/* VERIFICAÇÃO EM DUAS ETAPAS (modal do código)   */
+/* ============================================= */
+.code-modal{
+  width:min(400px, calc(100vw - 32px));
+  height:auto;
+}
+
+.code-modal-body{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding:26px 24px 22px 24px;
+}
+
+.code-modal-body .auth-heading,
+.code-modal-body .auth-subheading{
+  margin:0;
+}
+
+.code-modal #code-input{
+  font-size:20px;
+  letter-spacing:6px;
+  text-align:center;
+}
+
+.code-modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-top:4px;
+}
+
+.code-modal button:disabled{
+  opacity:.75;
+  cursor:default;
+}

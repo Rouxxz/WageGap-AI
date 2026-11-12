@@ -306,6 +306,16 @@ main{
 }
 
 
+/* telas sem filtro: esconde a barra e tira o espaço abaixo do título */
+.filters[hidden]{
+  display:none;
+}
+
+.topbar:has(.filters[hidden]) h1{
+  margin-bottom:0;
+}
+
+
 .field{
   display:flex;
 

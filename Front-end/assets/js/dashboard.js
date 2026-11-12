@@ -305,6 +305,13 @@ function aplicarIdioma(idioma){
 
 // ---- Navegação ----
 
+// telas que usam os filtros de UF, setor e ano (KPIs e ranking)
+const TELAS_COM_FILTRO = ['screen-home', 'screen-ranking'];
+
+function atualizarBarraFiltros(){
+  document.querySelector('.topbar .filters').hidden = !TELAS_COM_FILTRO.includes(telaAtual);
+}
+
 navItems.forEach(btn => {
 
   btn.addEventListener('click', () => {
@@ -328,6 +335,10 @@ navItems.forEach(btn => {
       );
 
     });
+
+
+    /* Mostra a barra de recorte só nas telas que usam os filtros */
+    atualizarBarraFiltros();
 
 
     /* Atualiza breadcrumb e título da página */

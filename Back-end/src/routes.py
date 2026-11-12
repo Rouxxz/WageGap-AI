@@ -7,6 +7,7 @@ import time
 import uuid
 from email.message import EmailMessage
 from typing import Optional
+import bcrypt
 from fastapi import APIRouter, HTTPException, Response, status
 from pydantic import BaseModel
 from src.config import get_db_connection
@@ -86,6 +87,30 @@ def _get_prefs(cursor, user_id):
         "dois_fatores": bool(row["dois_fatores"]),
     }
 
+# SENHAS
+# O banco guarda só o hash bcrypt (ex: "$2b$12$..."), nunca a senha digitada.
+# Contas criadas antes do hash ainda têm a senha em texto puro: elas continuam
+# entrando normalmente e a senha vira hash no primeiro login (_atualizar_hash_legado).
+
+def hash_senha(senha):
+    # bcrypt só considera os primeiros 72 bytes da senha
+    return bcrypt.hashpw(senha.encode("utf-8")[:72], bcrypt.gensalt()).decode("utf-8")
+
+def _e_hash(armazenada):
+    return armazenada.startswith(("$2a$", "$2b$", "$2y$"))
+
+def verificar_senha(senha, armazenada):
+    if not armazenada:
+        return False
+    if _e_hash(armazenada):
+        return bcrypt.checkpw(senha.encode("utf-8")[:72], armazenada.encode("utf-8"))
+    # conta antiga, senha ainda em texto puro
+    return secrets.compare_digest(senha.encode("utf-8"), armazenada.encode("utf-8"))
+
+def _atualizar_hash_legado(cursor, user_id, senha, armazenada):
+    if not _e_hash(armazenada):
+        cursor.execute("UPDATE usuarios SET senha = %s WHERE id = %s", (hash_senha(senha), user_id))
+
 def _get_user_or_404(cursor, user_id):
     cursor.execute("SELECT id, nome, email, senha, id_empresa FROM usuarios WHERE id = %s", (user_id,))
     user = cursor.fetchone()
@@ -125,11 +150,20 @@ def login(data: LoginSchema):
     try:
         conn = get_db_connection()
         with conn.cursor() as cursor:
-            query = "SELECT id, nome, email, id_empresa FROM usuarios WHERE email = %s AND senha = %s"
-            cursor.execute(query, (data.email, data.senha))
+            cursor.execute(
+                "SELECT id, nome, email, senha, id_empresa FROM usuarios WHERE email = %s",
+                (data.email,)
+            )
             user = cursor.fetchone()
-            prefs = _get_prefs(cursor, user["id"]) if user else None
+            if user and verificar_senha(data.senha, user["senha"]):
+                _atualizar_hash_legado(cursor, user["id"], data.senha, user["senha"])
+                conn.commit()
+                prefs = _get_prefs(cursor, user["id"])
+            else:
+                user = None
         conn.close()
+        if user:
+            del user["senha"]  # o hash não vai para o navegador
 
         if not user:
             raise HTTPException(
@@ -187,7 +221,7 @@ def signup(data: SignupSchema):
             # 3. Cria o novo usuário
             cursor.execute(
                 "INSERT INTO usuarios (id_empresa, nome, email, senha) VALUES (%s, %s, %s, %s)",
-                (id_empresa, data.nome, data.email, data.senha)
+                (id_empresa, data.nome, data.email, hash_senha(data.senha))
             )
             conn.commit()
 
@@ -270,11 +304,11 @@ def change_password(user_id: int, data: PasswordChangeSchema):
         conn = get_db_connection()
         with conn.cursor() as cursor:
             user = _get_user_or_404(cursor, user_id)
-            if user["senha"] != data.senha_atual:
+            if not verificar_senha(data.senha_atual, user["senha"]):
                 conn.close()
                 raise HTTPException(status_code=401, detail="Senha atual incorreta.")
 
-            cursor.execute("UPDATE usuarios SET senha = %s WHERE id = %s", (data.nova_senha, user_id))
+            cursor.execute("UPDATE usuarios SET senha = %s WHERE id = %s", (hash_senha(data.nova_senha), user_id))
         conn.commit()
         conn.close()
         return {"message": "Senha alterada com sucesso!"}
@@ -350,7 +384,7 @@ def delete_account(user_id: int, data: DeleteAccountSchema):
         conn = get_db_connection()
         with conn.cursor() as cursor:
             user = _get_user_or_404(cursor, user_id)
-            if user["senha"] != data.senha:
+            if not verificar_senha(data.senha, user["senha"]):
                 conn.close()
                 raise HTTPException(status_code=401, detail="Senha incorreta.")
 

@@ -1248,6 +1248,25 @@ tr.top .rank-badge{
 }
 
 
+/* campos só leitura (nome e e-mail da conta): fundo apagado e sem foco dourado */
+.settings-fields-row .field input[readonly]{
+  background:var(--paper);
+
+  color:var(--slate-soft);
+
+  cursor:not-allowed;
+
+  /* esconde a barrinha piscando ao clicar */
+  caret-color:transparent;
+}
+
+.settings-fields-row .field input[readonly]:focus{
+  border-color:var(--line);
+
+  box-shadow:none;
+}
+
+
 .settings-row{
   display:flex;
 

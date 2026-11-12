@@ -404,11 +404,13 @@
               <div class="settings-fields-row">
                 <div class="field">
                   <label for="set-nome" data-i18n="profile.name">Nome completo</label>
-                  <input type="text" id="set-nome" value="Felipe Salinas Caodaglio">
+                  <!-- só leitura: os dados vêm da conta logada (dashboard.js) -->
+                  <input type="text" id="set-nome" value="" readonly>
                 </div>
                 <div class="field">
                   <label for="set-email" data-i18n="profile.email">E-mail</label>
-                  <input type="email" id="set-email" value="felipe.salinas@exemplo.com">
+                  <!-- type="text" porque o valor é mascarado, ex: fe•••••@exemplo.com -->
+                  <input type="text" id="set-email" value="" readonly>
                 </div>
               </div>
 

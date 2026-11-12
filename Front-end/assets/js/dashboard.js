@@ -1344,5 +1344,13 @@ function loadUserData() {
     const inputEmail = document.getElementById('set-email');
 
     if (inputNome) inputNome.value = userName;
-    if (inputEmail) inputEmail.value = usuario.email;
+    if (inputEmail) inputEmail.value = mascararEmail(usuario.email);
+}
+
+// "felipe.salinas@exemplo.com" -> "fe•••••@exemplo.com"
+function mascararEmail(email) {
+    if (!email || !email.includes('@')) return '';
+    const [local, dominio] = email.split('@');
+    const visivel = local.slice(0, Math.min(2, local.length - 1));
+    return `${visivel}•••••@${dominio}`;
 }

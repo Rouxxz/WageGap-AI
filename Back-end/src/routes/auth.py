@@ -1,13 +1,16 @@
-# ROTAS DE AUTENTICAÇÃO (LOGIN / REGISTRO / 2FA)
+# ROTAS DE AUTENTICAÇÃO (LOGIN / REGISTRO / 2FA / RECUPERAÇÃO DE SENHA)
+import traceback
 import uuid
 
 from fastapi import APIRouter, HTTPException, status
 
 from src.config import conexao
-from src.repositories import empresas, preferencias, usuarios
-from src.schemas import LoginSchema, SignupSchema, Verify2FASchema
-from src.security import (gerar_codigo_2fa, hash_senha, precisa_atualizar_hash,
-                          validar_codigo_2fa, verificar_senha)
+from src.repositories import empresas, preferencias, recuperacao, usuarios
+from src.schemas import (ForgotPasswordSchema, LoginSchema, ResetPasswordSchema, SignupSchema,
+                         Verify2FASchema)
+from src.security import (RECUPERACAO_VALIDADE_MIN, SENHA_MINIMA, enviar_link_recuperacao,
+                          gerar_codigo_2fa, gerar_token_recuperacao, hash_senha, hash_token,
+                          precisa_atualizar_hash, validar_codigo_2fa, verificar_senha)
 
 router = APIRouter(prefix="/auth", tags=["Autenticação"])
 
@@ -75,3 +78,45 @@ def verify_2fa(data: Verify2FASchema):
 
     del user["senha"]
     return {"message": "Login efetuado com sucesso!", "user": user}
+
+
+# RECUPERAÇÃO DE SENHA
+# A resposta é sempre a mesma, exista o e-mail ou não. Assim ninguém usa esta
+# rota para descobrir quais e-mails estão cadastrados (enumeração de usuários).
+
+MSG_LINK_ENVIADO = "Se o e-mail estiver cadastrado, enviaremos um link para criar uma nova senha."
+
+
+@router.post("/forgot-password")
+def forgot_password(data: ForgotPasswordSchema):
+    token = None
+    with conexao() as cursor:
+        user = usuarios.buscar_por_email(cursor, data.email.strip())
+        if user:
+            token, token_hash = gerar_token_recuperacao()
+            recuperacao.criar(cursor, user["id"], token_hash, RECUPERACAO_VALIDADE_MIN)
+
+    if token:
+        try:
+            enviar_link_recuperacao(user["email"], token)
+        except Exception:
+            # um erro aqui revelaria que o e-mail existe: registra no log e responde igual
+            traceback.print_exc()
+
+    return {"message": MSG_LINK_ENVIADO}
+
+
+@router.post("/reset-password")
+def reset_password(data: ResetPasswordSchema):
+    if len(data.nova_senha) < SENHA_MINIMA:
+        raise HTTPException(status_code=400, detail=f"A nova senha deve ter ao menos {SENHA_MINIMA} caracteres.")
+
+    with conexao() as cursor:
+        registro = recuperacao.buscar_valido(cursor, hash_token(data.token.strip()))
+        if not registro:
+            raise HTTPException(status_code=400, detail="Link inválido ou expirado. Peça um novo.")
+        usuarios.atualizar_senha(cursor, registro["id_usuario"], hash_senha(data.nova_senha))
+        # o link só vale uma vez
+        recuperacao.excluir_do_usuario(cursor, registro["id_usuario"])
+
+    return {"message": "Senha alterada com sucesso! Você já pode entrar."}

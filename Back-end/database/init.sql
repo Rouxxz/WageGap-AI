@@ -32,6 +32,16 @@ CREATE TABLE IF NOT EXISTS preferencias (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
+-- 2.2 Recuperação de senha: só o hash (SHA-256) do token do link fica no banco
+CREATE TABLE IF NOT EXISTS tokens_recuperacao (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    token_hash CHAR(64) NOT NULL UNIQUE,
+    expira_em DATETIME NOT NULL,
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
 -- 3. Tabela de Clusters
 CREATE TABLE IF NOT EXISTS clusters (
     id INT AUTO_INCREMENT PRIMARY KEY,

@@ -32,3 +32,10 @@ class PreferencesSchema(BaseModel):
 
 class DeleteAccountSchema(BaseModel):
     senha: str
+
+class ForgotPasswordSchema(BaseModel):
+    email: str
+
+class ResetPasswordSchema(BaseModel):
+    token: str
+    nova_senha: str

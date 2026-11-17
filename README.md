@@ -148,6 +148,8 @@ WageGap-AI/
 | `GET /api/clusters` | Perfis com disparidade bruta e ajustada |
 | `GET /api/shap` | Peso dos fatores e disparidade bruta x ajustada (`?cluster=id` para um perfil) |
 | `POST /api/auth/login` | Login (com 2FA, devolve `requires_2fa` e pede `/api/auth/verify-2fa`) |
+| `POST /api/auth/forgot-password` | Envia o link de recuperação de senha (resposta igual exista o e-mail ou não) |
+| `POST /api/auth/reset-password` | Troca a senha com o token do link (vale 30 minutos e uma única vez) |
 
 A lista completa está em http://localhost:8000/docs.
 

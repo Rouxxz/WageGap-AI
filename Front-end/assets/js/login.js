@@ -302,7 +302,7 @@ function validarSignup(){
 
 async function fakeLoginRequest(email, senha){
   try {
-    const resp = await fetch('http://localhost:8000/api/auth/login', {
+    const resp = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, senha })
@@ -330,7 +330,7 @@ async function fakeLoginRequest(email, senha){
 
 async function fakeSignupRequest(dados){
   try {
-    const resp = await fetch('http://localhost:8000/api/auth/signup', {
+    const resp = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       // O seu front envia 'nome', 'email', 'senha'. O back-end já está preparado para receber.
@@ -593,7 +593,7 @@ codeForm.addEventListener('submit', async (evento) => {
   codeSubmitBtn.disabled = true;
 
   try {
-    const resp = await fetch('http://localhost:8000/api/auth/verify-2fa', {
+    const resp = await fetch(`${API_URL}/auth/verify-2fa`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email: emailPendente2fa, codigo })

@@ -121,7 +121,14 @@ Opções úteis:
 WageGap-AI/
 ├── Back-end/
 │   ├── database/init.sql     # tabelas e dados de exemplo
-│   └── src/                  # API FastAPI (main.py, routes.py, config.py)
+│   └── src/                  # API FastAPI
+│       ├── main.py           # cria o app, CORS e tratamento de erros
+│       ├── config.py         # conexão com o banco
+│       ├── schemas.py        # formato dos dados recebidos (Pydantic)
+│       ├── security.py       # hash de senha e 2FA
+│       ├── exportacao.py     # CSV de "exportar meus dados"
+│       ├── repositories/     # só SQL (usuarios, empresas, preferencias, dashboard)
+│       └── routes/           # só HTTP (auth, conta, dashboard)
 ├── Front-end/
 │   ├── pages/                # login, cadastro, dashboard, termos
 │   └── assets/               # CSS e JavaScript

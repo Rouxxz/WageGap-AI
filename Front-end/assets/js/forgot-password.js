@@ -1,27 +1,22 @@
 /*
   forgot-password.js
   -------------------
-  Lógica da tela de recuperação de senha.
-
-  Como ainda não existe backend de autenticação (sem rota de
-  envio de e-mail), este arquivo cuida só do FRONT-END:
+  Lógica da tela de recuperação de senha:
 
     1) validar o e-mail digitado
-    2) simular o envio (loading no botão)
-    3) esconder o formulário e mostrar a confirmação "Link enviado!"
+    2) pedir o link à API (POST /api/auth/forgot-password)
+    3) esconder o formulário e mostrar a confirmação
 
-  Importante (boa prática de segurança, já deixada assim de
-  propósito): a tela sempre mostra "link enviado", mesmo que o
-  e-mail não exista cadastrado. Isso evita que alguém use essa
-  tela para descobrir quais e-mails estão cadastrados no sistema
-  (um ataque comum chamado "enumeração de usuários"). A decisão
-  de disparar o e-mail de verdade ou não fica só no backend,
-  quando ele existir.
+  O link que chega por e-mail abre a reset-password.html, onde
+  a pessoa cria a nova senha.
 
-  Quando o backend tiver uma rota real (ex: POST
-  /api/forgot-password), é só trocar a função
-  `fakeForgotPasswordRequest` por um fetch() de verdade — a
-  validação e o loading continuam funcionando do mesmo jeito.
+  Importante (boa prática de segurança, de propósito): a tela
+  mostra a mesma confirmação exista o e-mail ou não, e a API
+  também responde igual nos dois casos. Isso evita que alguém
+  use essa tela para descobrir quais e-mails estão cadastrados
+  (um ataque comum chamado "enumeração de usuários").
+
+  Precisa do config.js (API_URL) carregado antes.
 */
 
 
@@ -71,27 +66,18 @@ function validarFormulario(){
 }
 
 
-/* ENVIO (simulado)          */
+/* ENVIO                     */
 
-/*
-  Troque esta função por uma chamada real ao backend
-  quando o endpoint existir, por exemplo:
+async function pedirLinkRecuperacao(email){
 
-  async function fakeForgotPasswordRequest(email){
-    const resp = await fetch('/api/forgot-password', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ email })
-    });
-    if(!resp.ok) throw new Error('Falha ao enviar');
-    return resp.json();
-  }
-*/
-function fakeForgotPasswordRequest(email){
-
-  return new Promise((resolve) => {
-    setTimeout(() => resolve({ ok:true }), 900);
+  const resp = await fetch(`${API_URL}/auth/forgot-password`, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ email })
   });
+
+  if(!resp.ok) throw new Error('Falha ao enviar');
+  return resp.json();
 
 }
 
@@ -119,17 +105,18 @@ form.addEventListener('submit', (evento) => {
 
   setLoading(true);
 
-  fakeForgotPasswordRequest(email)
+  pedirLinkRecuperacao(email)
     .then(() => {
 
       /*
         Esconde o formulário (impede reenvio acidental) e
         mostra a confirmação, já citando o e-mail digitado.
+        O texto não afirma que o e-mail existe (ver comentário no topo).
       */
       form.style.display = 'none';
 
       successText.textContent =
-        `Enviamos um link para ${email}. Verifique sua caixa de entrada (e o spam) nos próximos minutos.`;
+        `Se ${email} estiver cadastrado, você vai receber um link válido por 30 minutos. Verifique sua caixa de entrada (e o spam).`;
 
       successNote.classList.add('is-visible');
 

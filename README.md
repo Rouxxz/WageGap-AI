@@ -99,6 +99,19 @@ Usuário de teste: `admin@wagegap.ai` / `123456`.
 Num banco novo, o dashboard começa só com dados de exemplo. Para carregar os dados
 reais, rode o pipeline (próxima seção).
 
+### Envio de e-mails (2FA e recuperação de senha)
+
+Sem configuração, os e-mails não são enviados: o código do 2FA e o link de
+recuperação aparecem no log da API (`docker compose logs backend`).
+
+Para enviar de verdade, copie `Back-end/.env.example` para `Back-end/.env` e
+preencha as variáveis `SMTP_*`. Com Gmail, use uma
+[senha de app](https://myaccount.google.com/apppasswords), não a senha da conta.
+Depois rode `docker compose up -d backend`.
+
+O `Back-end/.env` está no `.gitignore`. Nunca coloque senhas no
+`docker-compose.yml` nem em outro arquivo versionado.
+
 ### Rodando o pipeline de dados
 
 ```bash

@@ -12,6 +12,13 @@ services:
     build: ./Back-end
     ports:
       - "8000:8000"
+    # Credenciais do e-mail (SMTP_*), fora do git. Sem o arquivo, a API sobe
+    # normalmente e os e-mails (2FA, recuperação de senha) só aparecem no log.
+    # Modelo: Back-end/.env.example
+    env_file:
+      - path: ./Back-end/.env
+        required: false
+    # "environment" tem prioridade sobre o env_file
     environment:
       DB_HOST: database
       DB_USER: dev_user

@@ -1,5 +1,3 @@
-const API_URL = 'http://localhost:8000/api';
-
 const navItems = document.querySelectorAll('.nav-item[data-target]');
 
 const screens = document.querySelectorAll('.screen');

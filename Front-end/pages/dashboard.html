@@ -126,7 +126,7 @@
 
           <div class="field">
             <label for="f-uf" data-i18n="filter.uf">UF</label>
-            <!-- opções preenchidas pelo dashboard.js -->
+            <!-- opções preenchidas pelo filtros.js -->
             <select id="f-uf">
               <option value="" data-i18n="filter.allUf">Todas as UFs</option>
             </select>
@@ -245,7 +245,7 @@
 
             <div class="cluster-layout">
 
-              <!-- gráfico e cards montados pelo dashboard.js -->
+              <!-- gráfico e cards montados pelo clusters.js -->
               <div class="cluster-chart">
                 <svg id="cluster-chart" viewBox="0 0 480 320" width="100%" role="img"
                      aria-label="Gráfico de bolhas: disparidade de gênero e de raça por perfil de trabalhadores"></svg>
@@ -282,14 +282,14 @@
             <div class="shap-controls">
               <div class="field">
                 <label for="f-cluster">Perfil (cluster)</label>
-                <!-- opções preenchidas pelo dashboard.js -->
+                <!-- opções preenchidas pelo shap.js -->
                 <select id="f-cluster">
                   <option value="">Todos os perfis (recorte inteiro)</option>
                 </select>
               </div>
             </div>
 
-            <!-- barras montadas pelo dashboard.js -->
+            <!-- barras montadas pelo shap.js -->
             <div id="shap-bars"></div>
 
             <p class="block-desc shap-nota" id="shap-nota"></p>
@@ -361,7 +361,7 @@
                   </tr>
                 </thead>
 
-                <!-- linhas montadas pelo dashboard.js -->
+                <!-- linhas montadas pelo ranking.js -->
                 <tbody id="ranking-body"></tbody>
               </table>
             </div>
@@ -404,7 +404,7 @@
               <div class="settings-fields-row">
                 <div class="field">
                   <label for="set-nome" data-i18n="profile.name">Nome completo</label>
-                  <!-- só leitura: os dados vêm da conta logada (dashboard.js) -->
+                  <!-- só leitura: os dados vêm da conta logada (configuracoes.js) -->
                   <input type="text" id="set-nome" value="" readonly>
                 </div>
                 <div class="field">

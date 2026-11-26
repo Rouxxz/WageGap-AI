@@ -53,12 +53,16 @@ const signupForm = document.getElementById('signup-form');
 
 const nomeInput = document.getElementById('su-nome');
 const suEmailInput = document.getElementById('su-email');
+const razaoInput = document.getElementById('su-razao');
+const cnpjInput = document.getElementById('su-cnpj');
 const suSenhaInput = document.getElementById('su-senha');
 const suSenha2Input = document.getElementById('su-senha2');
 const termosInput = document.getElementById('su-termos');
 
 const nomeError = document.getElementById('su-nome-error');
 const suEmailError = document.getElementById('su-email-error');
+const razaoError = document.getElementById('su-razao-error');
+const cnpjError = document.getElementById('su-cnpj-error');
 const suSenhaError = document.getElementById('su-senha-error');
 const suSenha2Error = document.getElementById('su-senha2-error');
 const termosError = document.getElementById('su-termos-error');
@@ -160,6 +164,52 @@ function emailValido(valor){
 }
 
 
+/*
+  CNPJ: aceita o formato numérico e o alfanumérico (Receita Federal, 2026):
+  12 letras/números + 2 dígitos verificadores. Cada caractere vale o código
+  ASCII menos 48 ("0" = 0, "A" = 17). Mesma regra de Back-end/src/cnpj.py.
+*/
+function normalizarCnpj(valor){
+  return valor.replace(/[.\-\/\s]/g, '').toUpperCase();
+}
+
+function digitoCnpj(base){
+  const pesos = base.length === 12
+    ? [5,4,3,2,9,8,7,6,5,4,3,2]
+    : [6,5,4,3,2,9,8,7,6,5,4,3,2];
+
+  let soma = 0;
+  for(let i = 0; i < base.length; i++){
+    soma += (base.charCodeAt(i) - 48) * pesos[i];
+  }
+
+  const resto = soma % 11;
+  return resto < 2 ? '0' : String(11 - resto);
+}
+
+function cnpjValido(valor){
+  const limpo = normalizarCnpj(valor);
+
+  if(!/^[0-9A-Z]{12}[0-9]{2}$/.test(limpo)) return false;
+  if(/^(.)\1+$/.test(limpo)) return false;   /* 00000000000000, 11111111111111... */
+
+  const dv1 = digitoCnpj(limpo.slice(0, 12));
+  const dv2 = digitoCnpj(limpo.slice(0, 12) + dv1);
+  return limpo.slice(12) === dv1 + dv2;
+}
+
+/* Máscara enquanto digita: "12345678000195" -> "12.345.678/0001-95" */
+function mascararCnpj(valor){
+  const c = normalizarCnpj(valor).replace(/[^0-9A-Z]/g, '').slice(0, 14);
+  let saida = c.slice(0, 2);
+  if(c.length > 2)  saida += '.' + c.slice(2, 5);
+  if(c.length > 5)  saida += '.' + c.slice(5, 8);
+  if(c.length > 8)  saida += '/' + c.slice(8, 12);
+  if(c.length > 12) saida += '-' + c.slice(12);
+  return saida;
+}
+
+
 /* --- Entrar --- */
 
 function limparErrosLogin(){
@@ -218,12 +268,14 @@ function validarLogin(){
 
 function limparErrosSignup(){
 
-  [nomeInput, suEmailInput, suSenhaInput, suSenha2Input].forEach((campo) => {
+  [nomeInput, suEmailInput, razaoInput, cnpjInput, suSenhaInput, suSenha2Input].forEach((campo) => {
     campo.classList.remove('input-error');
   });
 
   nomeError.textContent = '';
   suEmailError.textContent = '';
+  razaoError.textContent = '';
+  cnpjError.textContent = '';
   suSenhaError.textContent = '';
   suSenha2Error.textContent = '';
   termosError.textContent = '';
@@ -241,6 +293,8 @@ function validarSignup(){
 
   const nome = nomeInput.value.trim();
   const email = suEmailInput.value.trim();
+  const razao = razaoInput.value.trim();
+  const cnpj = cnpjInput.value.trim();
   const senha = suSenhaInput.value;
   const senha2 = suSenha2Input.value;
 
@@ -260,6 +314,25 @@ function validarSignup(){
   } else if(!emailValido(email)){
     suEmailError.textContent = 'Informe um e-mail válido.';
     suEmailInput.classList.add('input-error');
+    valido = false;
+  }
+
+
+  if(!razao){
+    razaoError.textContent = 'Informe a razão social.';
+    razaoInput.classList.add('input-error');
+    valido = false;
+  }
+
+
+  if(!cnpj){
+    cnpjError.textContent = 'Informe o CNPJ.';
+    cnpjInput.classList.add('input-error');
+    valido = false;
+
+  } else if(!cnpjValido(cnpj)){
+    cnpjError.textContent = 'CNPJ inválido. Confira os números.';
+    cnpjInput.classList.add('input-error');
     valido = false;
   }
 
@@ -333,14 +406,17 @@ async function fakeSignupRequest(dados){
     const resp = await fetch(`${API_URL}/auth/signup`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      // O seu front envia 'nome', 'email', 'senha'. O back-end já está preparado para receber.
+      // nome, email, razao_social, cnpj, senha
       body: JSON.stringify(dados)
     });
-    
-    const data = await resp.json();
-    
+
+    const data = await resp.json().catch(() => ({}));
+
     if(!resp.ok) {
-      throw new Error(data.detail || 'E-mail já cadastrado');
+      // a mensagem da API (e-mail repetido, empresa já cadastrada, CNPJ inválido) vai direto para a tela
+      const erro = new Error(typeof data.detail === 'string' ? data.detail : '');
+      erro.status = resp.status;
+      throw erro;
     }
     
     return { ok: true };
@@ -430,6 +506,8 @@ signupForm.addEventListener('submit', (evento) => {
   const dados = {
     nome: nomeInput.value.trim(),
     email: suEmailInput.value.trim(),
+    razao_social: razaoInput.value.trim(),
+    cnpj: cnpjInput.value.trim(),
     senha: suSenhaInput.value
   };
 
@@ -459,10 +537,17 @@ signupForm.addEventListener('submit', (evento) => {
 
       setLoadingSignup(false);
 
-      signupAlertText.textContent =
-        erro.message === 'E-mail já cadastrado'
-          ? 'Esse e-mail já está cadastrado. Tente entrar na plataforma.'
-          : 'Não foi possível criar a conta. Tente novamente.';
+      /* 400/409 trazem uma mensagem pensada para o usuário; o resto (500, rede) não */
+      const mensagemDaApi = (erro.status === 400 || erro.status === 409) && erro.message;
+
+      if(erro.status === 400 && erro.message === 'Este e-mail já está registrado.'){
+        signupAlertText.textContent = 'Esse e-mail já está cadastrado. Tente entrar na plataforma.';
+      } else if(erro.status === 409){
+        signupAlertText.textContent = mensagemDaApi;
+        cnpjInput.classList.add('input-error');
+      } else {
+        signupAlertText.textContent = mensagemDaApi || 'Não foi possível criar a conta. Tente novamente.';
+      }
 
       signupAlert.classList.add('is-visible');
 
@@ -484,13 +569,17 @@ signupForm.addEventListener('submit', (evento) => {
 
 });
 
-[nomeInput, suEmailInput, suSenhaInput, suSenha2Input].forEach((campo) => {
+[nomeInput, suEmailInput, razaoInput, cnpjInput, suSenhaInput, suSenha2Input].forEach((campo) => {
 
   campo.addEventListener('input', () => {
     campo.classList.remove('input-error');
     signupAlert.classList.remove('is-visible');
   });
 
+});
+
+cnpjInput.addEventListener('input', () => {
+  cnpjInput.value = mascararCnpj(cnpjInput.value);
 });
 
 termosInput.addEventListener('change', () => {

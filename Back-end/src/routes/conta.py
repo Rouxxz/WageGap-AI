@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Response
 
 from src.config import conexao
 from src.exportacao import gerar_csv_export
-from src.repositories import dashboard, preferencias, usuarios
+from src.repositories import dashboard, empresas, preferencias, usuarios
 from src.schemas import DeleteAccountSchema, PasswordChangeSchema, PreferencesSchema
 from src.security import hash_senha, verificar_senha
 
@@ -70,5 +70,7 @@ def delete_account(user_id: int, data: DeleteAccountSchema):
         if not verificar_senha(data.senha, user["senha"]):
             raise HTTPException(status_code=401, detail="Senha incorreta.")
         usuarios.excluir(cursor, user_id)
+        if user["id_empresa"]:
+            empresas.excluir_se_sem_usuarios(cursor, user["id_empresa"])
 
     return {"message": "Conta excluída com sucesso."}

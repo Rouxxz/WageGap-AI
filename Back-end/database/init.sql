@@ -128,7 +128,7 @@ CREATE TABLE IF NOT EXISTS efeitos_ajustados (
 
 -- Inserir Empresa de Teste
 INSERT INTO empresas (razao_social, cnpj) VALUES
-('Tech Corp Solucoes LTDA', '12.345.678/0001-90');
+('Tech Corp Solucoes LTDA', '12.345.678/0001-95');
 
 -- Inserir Usuário Administrador vinculado à Empresa
 INSERT INTO usuarios (id_empresa, nome, email, senha) VALUES

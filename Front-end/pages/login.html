@@ -29,7 +29,7 @@
     <div class="auth-pane auth-pane-signup" id="pane-signup" inert>
 
       <h1 class="auth-heading">Criar conta</h1>
-      <p class="auth-subheading">Leva menos de um minuto. Use seu e-mail institucional para acesso completo ao dashboard.</p>
+      <p class="auth-subheading">Leva menos de um minuto. Use seu e-mail corporativo e os dados da sua empresa.</p>
 
       <!-- Alerta de erro geral (ex: e-mail já cadastrado). Oculto até o login.js exibir. -->
       <div class="auth-alert" id="signup-alert">
@@ -51,6 +51,21 @@
           <label for="su-email">E-mail</label>
           <input type="email" id="su-email" name="email" placeholder="voce@exemplo.com" autocomplete="email">
           <div class="field-error-msg" id="su-email-error"></div>
+        </div>
+
+        <!-- Dados da empresa (tabela empresas). Uma conta por CNPJ. -->
+        <div class="field-pair">
+          <div class="field">
+            <label for="su-razao">Razão social</label>
+            <input type="text" id="su-razao" name="razao_social" placeholder="Empresa LTDA" autocomplete="organization" maxlength="150">
+            <div class="field-error-msg" id="su-razao-error"></div>
+          </div>
+
+          <div class="field">
+            <label for="su-cnpj">CNPJ</label>
+            <input type="text" id="su-cnpj" name="cnpj" placeholder="00.000.000/0000-00" autocomplete="off" maxlength="18" spellcheck="false">
+            <div class="field-error-msg" id="su-cnpj-error"></div>
+          </div>
         </div>
 
         <div class="field">
@@ -117,7 +132,7 @@
     <div class="auth-pane auth-pane-login" id="pane-login">
 
       <h1 class="auth-heading">Entrar na plataforma</h1>
-      <p class="auth-subheading">Acesse com o e-mail e senha cadastrados pela sua instituição.</p>
+      <p class="auth-subheading">Acesse com o e-mail e a senha da conta da sua empresa.</p>
 
       <!-- Aviso de conta criada (aparece depois do cadastro) -->
       <div class="auth-success-note" id="login-success">

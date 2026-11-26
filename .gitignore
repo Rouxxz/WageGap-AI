@@ -5,3 +5,7 @@ __pycache__/
 Pipeline/data/raw/
 Pipeline/data/interim/
 Pipeline/data/processed/
+
+# documentação interna do grupo: fica só na máquina local, não vai para o GitHub
+Documentacao/
+*Documenta*o do Projeto*.pdf

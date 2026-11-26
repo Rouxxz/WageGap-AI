@@ -66,7 +66,7 @@ Detalhes da metodologia e das limitações estão em [`Pipeline/README.md`](Pipe
 | Clusters de perfis | Gráfico de bolhas com a disparidade de gênero e de raça de cada perfil |
 | Explicabilidade (SHAP) | Peso de cada fator na renda e disparidade bruta x ajustada, por perfil |
 | Ranking | Municípios e setores ordenados pelo índice de prioridade para capacitação |
-| Configurações | Senha, tema, idioma (pt/en/es), notificações, 2FA, exportação e exclusão de conta |
+| Configurações | Perfil (com empresa e CNPJ), senha, tema, idioma (pt/en/es), notificações, 2FA, exportação e exclusão de conta |
 
 Os filtros de UF, setor e ano no topo valem para os KPIs e para o ranking.
 
@@ -95,6 +95,13 @@ docker compose up -d --build
 | MySQL | `localhost:3307` (usuário `dev_user`, senha `devpassword`) |
 
 Usuário de teste: `admin@wagegap.ai` / `123456`.
+
+### Cadastro de empresas
+
+A plataforma é para empresas (B2B). O cadastro pede razão social e CNPJ, e cada
+CNPJ pode ter uma única conta. O CNPJ é validado pelos dígitos verificadores no
+navegador e na API, e já aceita o formato alfanumérico da Receita Federal.
+Para testar, use `11.222.333/0001-81`, que é válido e não está no banco de exemplo.
 
 Num banco novo, o dashboard começa só com dados de exemplo. Para carregar os dados
 reais, rode o pipeline (próxima seção).
@@ -138,7 +145,8 @@ WageGap-AI/
 │       ├── main.py           # cria o app, CORS e tratamento de erros
 │       ├── config.py         # conexão com o banco
 │       ├── schemas.py        # formato dos dados recebidos (Pydantic)
-│       ├── security.py       # hash de senha e 2FA
+│       ├── security.py       # hash de senha, 2FA, e-mail e recuperação de senha
+│       ├── cnpj.py           # validação do CNPJ
 │       ├── exportacao.py     # CSV de "exportar meus dados"
 │       ├── repositories/     # só SQL (usuarios, empresas, preferencias, dashboard)
 │       └── routes/           # só HTTP (auth, conta, dashboard)
@@ -160,6 +168,7 @@ WageGap-AI/
 | `GET /api/filtros` | UFs, setores e anos disponíveis no banco |
 | `GET /api/clusters` | Perfis com disparidade bruta e ajustada |
 | `GET /api/shap` | Peso dos fatores e disparidade bruta x ajustada (`?cluster=id` para um perfil) |
+| `POST /api/auth/signup` | Cadastro com nome, e-mail, senha, razão social e CNPJ (409 se o CNPJ já tiver conta) |
 | `POST /api/auth/login` | Login (com 2FA, devolve `requires_2fa` e pede `/api/auth/verify-2fa`) |
 | `POST /api/auth/forgot-password` | Envia o link de recuperação de senha (resposta igual exista o e-mail ou não) |
 | `POST /api/auth/reset-password` | Troca a senha com o token do link (vale 30 minutos e uma única vez) |
@@ -184,8 +193,10 @@ Os microdados da RAIS são públicos e não identificam os trabalhadores.
   são uma escolha de política pública e podem ser ajustados em
   `Pipeline/src/diagnostico.py`.
 - Por enquanto, só a região Norte foi processada.
-- O login é de demonstração: as senhas ficam sem criptografia e a API não usa token
-  de sessão.
+- As senhas são guardadas como hash bcrypt, mas a API ainda não usa token de sessão:
+  as rotas de conta confiam no id da URL.
+- O CNPJ é conferido só pelos dígitos verificadores, sem consulta à Receita, e cada
+  empresa tem um único usuário (ainda não há convites para colegas).
 
 ## Licença
 

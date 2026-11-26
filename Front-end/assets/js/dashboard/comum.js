@@ -17,7 +17,10 @@ function getUsuario(){
     return {
       id: user.id || user[0],
       nome: user.nome || user[1],
-      email: user.email || user[2]
+      email: user.email || user[2],
+      // contas antigas (ou sessões salvas antes desta versão) não têm empresa
+      razao_social: user.razao_social || null,
+      cnpj: user.cnpj || null
     };
   } catch(e){
     return null;

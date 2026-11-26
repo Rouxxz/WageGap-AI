@@ -11,8 +11,8 @@ class SignupSchema(BaseModel):
     nome: str
     email: str
     senha: str
-    razao_social: str = None  # Opcional
-    cnpj: str = None          # Opcional: aceita CNPJ do front ou gera automático
+    razao_social: str
+    cnpj: str  # com ou sem pontuação; validado em routes/auth.py
 
 class Verify2FASchema(BaseModel):
     email: str

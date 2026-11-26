@@ -1,9 +1,15 @@
+# LEFT JOIN: contas antigas, sem empresa, continuam funcionando
+_SELECT_USUARIO = (
+    "SELECT u.id, u.nome, u.email, u.senha, u.id_empresa, e.razao_social, e.cnpj "
+    "FROM usuarios u LEFT JOIN empresas e ON e.id_empresa = u.id_empresa "
+)
+
 def buscar_por_email(cursor, email):
-    cursor.execute("SELECT id, nome, email, senha, id_empresa FROM usuarios WHERE email = %s", (email,))
+    cursor.execute(_SELECT_USUARIO + "WHERE u.email = %s", (email,))
     return cursor.fetchone()
 
 def buscar_por_id(cursor, user_id):
-    cursor.execute("SELECT id, nome, email, senha, id_empresa FROM usuarios WHERE id = %s", (user_id,))
+    cursor.execute(_SELECT_USUARIO + "WHERE u.id = %s", (user_id,))
     return cursor.fetchone()
 
 def email_existe(cursor, email):

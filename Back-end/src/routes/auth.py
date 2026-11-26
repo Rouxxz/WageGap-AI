@@ -1,9 +1,9 @@
 # ROTAS DE AUTENTICAÇÃO (LOGIN / REGISTRO / 2FA / RECUPERAÇÃO DE SENHA)
 import traceback
-import uuid
 
 from fastapi import APIRouter, HTTPException, status
 
+from src import cnpj
 from src.config import conexao
 from src.repositories import empresas, preferencias, recuperacao, usuarios
 from src.schemas import (ForgotPasswordSchema, LoginSchema, ResetPasswordSchema, SignupSchema,
@@ -47,6 +47,14 @@ def login(data: LoginSchema):
 
 @router.post("/signup")
 def signup(data: SignupSchema):
+    razao_social = data.razao_social.strip()
+    if not razao_social:
+        raise HTTPException(status_code=400, detail="Informe a razão social da empresa.")
+    if len(razao_social) > 150:
+        raise HTTPException(status_code=400, detail="A razão social deve ter no máximo 150 caracteres.")
+    if not cnpj.valido(data.cnpj):
+        raise HTTPException(status_code=400, detail="CNPJ inválido.")
+
     with conexao() as cursor:
         if usuarios.email_existe(cursor, data.email):
             raise HTTPException(
@@ -54,12 +62,16 @@ def signup(data: SignupSchema):
                 detail="Este e-mail já está registrado."
             )
 
-        id_empresa = None
-        if data.razao_social:
-            # Gera um CNPJ fictício único com no máximo 18 caracteres se não for enviado
-            cnpj = data.cnpj if data.cnpj else f"00.{uuid.uuid4().hex[:8]}-01"
-            id_empresa = empresas.criar(cursor, data.razao_social, cnpj)
+        # cada empresa tem uma conta só. Não vinculamos automaticamente a uma
+        # empresa existente: o CNPJ é público e não prova vínculo com ela.
+        cnpj_formatado = cnpj.formatar(data.cnpj)
+        if empresas.cnpj_existe(cursor, cnpj_formatado):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Esta empresa já está cadastrada. Fale com o responsável pela conta."
+            )
 
+        id_empresa = empresas.criar(cursor, razao_social, cnpj_formatado)
         usuarios.criar(cursor, id_empresa, data.nome, data.email, hash_senha(data.senha))
 
     return {"message": "Usuário registrado com sucesso!"}

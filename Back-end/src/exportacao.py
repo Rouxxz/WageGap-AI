@@ -8,8 +8,8 @@ def gerar_csv_export(user, prefs, ranking, clusters):
     writer = csv.writer(buffer, delimiter=";")
 
     writer.writerow(["# Perfil"])
-    writer.writerow(["nome", "email"])
-    writer.writerow([user["nome"], user["email"]])
+    writer.writerow(["nome", "email", "razao_social", "cnpj"])
+    writer.writerow([user["nome"], user["email"], user.get("razao_social") or "", user.get("cnpj") or ""])
     writer.writerow([])
 
     writer.writerow(["# Preferências"])

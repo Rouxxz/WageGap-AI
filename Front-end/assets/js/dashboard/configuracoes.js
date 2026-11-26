@@ -37,6 +37,20 @@ function loadUserData() {
 
     if (inputNome) inputNome.value = userName;
     if (inputEmail) inputEmail.value = mascararEmail(usuario.email);
+
+    // Empresa: troca o "Equipe WageGap AI" pela razão social e preenche os campos
+    const inputEmpresa = document.getElementById('set-empresa');
+    const inputCnpj = document.getElementById('set-cnpj');
+
+    if (usuario.razao_social) {
+        const subEl = document.querySelector('.settings-profile-sub');
+        if (subEl) {
+            subEl.removeAttribute('data-i18n'); // a tradução não deve sobrescrever o nome da empresa
+            subEl.textContent = usuario.razao_social;
+        }
+        if (inputEmpresa) inputEmpresa.value = usuario.razao_social;
+    }
+    if (inputCnpj && usuario.cnpj) inputCnpj.value = usuario.cnpj;
 }
 
 // "felipe.salinas@exemplo.com" -> "fe•••••@exemplo.com"

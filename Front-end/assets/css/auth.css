@@ -478,6 +478,17 @@
   gap:9px;
 }
 
+/* Dois campos lado a lado (razão social + CNPJ no cadastro) */
+.field-pair{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.field-pair .field{
+  min-width:0;
+}
+
 .auth-pane-login{
   z-index:2;
 }
@@ -713,6 +724,11 @@
 
   .auth-switch-mobile{
     display:block;
+  }
+
+  .field-pair{
+    grid-template-columns:1fr;
+    gap:9px;
   }
 }
 /* =================================================== */

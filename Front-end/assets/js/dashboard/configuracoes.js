@@ -92,7 +92,6 @@ async function loadPreferences(){
     aplicarIdioma(prefs.idioma);
 
     document.getElementById('set-notif-dados').checked = prefs.notif_dados;
-    document.getElementById('set-notif-resumo').checked = prefs.notif_resumo;
     document.getElementById('set-2fa').checked = prefs.dois_fatores;
 
   } catch(error){
@@ -178,7 +177,6 @@ if(selectIdioma){
 // ---- Notificações e 2FA ----
 
 ligarSwitch('set-notif-dados', 'notif_dados');
-ligarSwitch('set-notif-resumo', 'notif_resumo');
 ligarSwitch('set-2fa', 'dois_fatores', ['msg.twofaOn', 'msg.twofaOff']);
 
 

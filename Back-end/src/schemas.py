@@ -27,7 +27,6 @@ class PreferencesSchema(BaseModel):
     idioma: Optional[str] = None
     tema: Optional[str] = None
     notif_dados: Optional[bool] = None
-    notif_resumo: Optional[bool] = None
     dois_fatores: Optional[bool] = None
 
 class DeleteAccountSchema(BaseModel):

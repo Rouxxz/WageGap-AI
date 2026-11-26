@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS preferencias (
     idioma VARCHAR(10) NOT NULL DEFAULT 'pt-BR',
     tema VARCHAR(10) NOT NULL DEFAULT 'light',
     notif_dados BOOLEAN NOT NULL DEFAULT TRUE,
-    notif_resumo BOOLEAN NOT NULL DEFAULT FALSE,
     dois_fatores BOOLEAN NOT NULL DEFAULT FALSE,
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE
 );
